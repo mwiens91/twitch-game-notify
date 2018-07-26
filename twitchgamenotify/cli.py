@@ -16,8 +16,12 @@ def parse_runtime_args():
         prog=NAME,
         description="%(prog)s - " + DESCRIPTION,)
     parser.add_argument(
-        "--version",
-        action="version",
+        '--print-to-terminal',
+        action='store_true',
+        help="print to terminal (doesn't connect to D-Bus)")
+    parser.add_argument(
+        '--version',
+        action='version',
         version="%(prog)s " + VERSION)
 
     return parser.parse_args()
