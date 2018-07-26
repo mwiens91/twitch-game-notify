@@ -1,11 +1,18 @@
 image: ubuntu
 
 install:
+  # Install pip requirements and D-Bus dependencies
   - sudo apt install -y python3-pip libdbus-1-dev libdbus-glib-1-dev
   - pip3 install -r requirements.txt
+
+  # Code cov
+  - pip3 install codecov
 
 build: off
 
 test_script:
   # Test
-  - ./run_twitchgamenotify.py --print-to-terminal
+  - coverage run --source='.' run_twitchgamenotify.py --print-to-terminal
+
+after_test:
+  - codecov
