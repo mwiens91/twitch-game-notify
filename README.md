@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/mwiens91/twitch-game-notify.svg?branch=master)](https://travis-ci.com/mwiens91/twitch-game-notify)
+[![Build status](https://ci.appveyor.com/api/projects/status/1qrsle0yooilklav?svg=true)](https://ci.appveyor.com/project/mwiens91/twitch-game-notify)
 
 # twitch-game-notify
 

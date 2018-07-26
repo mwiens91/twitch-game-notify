@@ -1,0 +1,14 @@
+image: ubuntu
+
+install:
+  - sudo apt install -y python3-pip libdbus-1-dev libdbus-glib-1-dev dbus dbus-x11
+  - pip3 install -r requirements.txt
+
+build: off
+
+test_script:
+  # Specify no X11 display
+  - export $(dbus-launch)
+
+  # Test
+  - ./run_twitchgamenotify.py
