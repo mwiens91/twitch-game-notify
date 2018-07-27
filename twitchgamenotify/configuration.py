@@ -1,7 +1,15 @@
-"""Contains CLI related functions."""
+"""Contains configuration related functions."""
 
 import argparse
+from twitchgamenotify.constants import LOGLEVEL_CHOICES, LOGLEVEL_DICT, WARNING
 from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
+
+
+class TranslateLogLevelAction(argparse.Action):
+    """Sets the logging number given loglevel string."""
+    def __call__(self, parser, namespace, values, option_string=None):
+        """Set a logging loglevel number."""
+        setattr(namespace, self.dest, LOGLEVEL_DICT[values])
 
 
 def parse_runtime_args():
@@ -15,6 +23,12 @@ def parse_runtime_args():
     parser = argparse.ArgumentParser(
         prog=NAME,
         description="%(prog)s - " + DESCRIPTION,)
+    parser.add_argument(
+        '-l', '--loglevel',
+        default=LOGLEVEL_DICT[WARNING],
+        choices=LOGLEVEL_CHOICES,
+        action=TranslateLogLevelAction,
+        help="how much to log",)
     parser.add_argument(
         '--print-to-terminal',
         action='store_true',

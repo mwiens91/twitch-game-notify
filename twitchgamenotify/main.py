@@ -3,7 +3,7 @@
 import time
 import threading
 import notify2
-from twitchgamenotify.cli import parse_runtime_args
+from twitchgamenotify.configuration import parse_runtime_args
 from twitchgamenotify.version import NAME
 
 
