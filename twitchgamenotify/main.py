@@ -13,6 +13,21 @@ from twitchgamenotify.twitch_api import TwitchApi
 from twitchgamenotify.version import NAME
 
 
+def query_iteration(print_to_terminal=False):
+    """Query the Twitch API once.
+
+    Arg:
+        print_to_terminal: A boolean signalling whether to print to the
+            terminal instead of passing a message to D-Bus.
+    """
+    # TODO: debug message
+    msg = ("HEY", "hola",)
+
+    if print_to_terminal:
+        print("%s: %s" % msg)
+    else:
+        notify2.Notification(*msg).show()
+
 def main():
     """The main function."""
     # Get runtime arguments
@@ -37,6 +52,19 @@ def main():
     # Connect to the API
     twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
 
-    # TODO: debug message
-    if not cli_args.print_to_terminal:
-        notify2.Notification("HEY", "HI").show()
+    # Initialize some sort of data structure to keep track of what
+    # selected streamers are playing
+
+    # Query (and possibly notify) periodically
+    if cli_args.one_shot:
+        query_iteration(print_to_terminal=cli_args.print_to_terminal)
+    else:
+        try:
+            while True:
+                # Query
+                query_iteration(print_to_terminal=cli_args.print_to_terminal)
+
+                # Wait before querying again
+                time.sleep(config_dict['query-period'])
+        except KeyboardInterrupt:
+            logging.critical("Exitting %s", NAME)

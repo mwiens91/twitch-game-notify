@@ -87,6 +87,10 @@ def parse_runtime_args():
         action=TranslateLogLevelAction,
         help="how much to log",)
     parser.add_argument(
+        '--one-shot',
+        action='store_true',
+        help="query once then exit")
+    parser.add_argument(
         '--print-to-terminal',
         action='store_true',
         help="print to terminal (doesn't connect to D-Bus)")

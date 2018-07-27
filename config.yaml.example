@@ -1,3 +1,8 @@
 # twitch-game-notify config file
 
+# How often to query, in seconds. Note that each Client-ID is allowed 30
+# queries per minute (or a query every 0.5 seconds).
+query-period: 1
+
+# Twitch API authorization - see https://dev.twitch.tv/docs/api/
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
