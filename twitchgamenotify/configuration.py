@@ -3,6 +3,7 @@
 import argparse
 import os.path
 from xdg import XDG_CONFIG_HOME
+import yaml
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
     LOGLEVEL_CHOICES,
@@ -54,12 +55,18 @@ def find_config_file():
 
 
 def parse_config_file():
-    """Find and parse a config file."""
+    """Find and parse a config file.
+
+    Raises:
+        ConfigFileNotFound: A config file couldn't be found.
+    """
     # Find the config file first
-    try:
-        find_config_file()
-    except ConfigFileNotFound:
-        print(">:0")
+    config_path = find_config_file()
+
+    # Now parse and return it - note that PyYAML doesn't come with any
+    # schema validation, which might be desirable at some point
+    with open(config_path, 'r') as config_file:
+        return yaml.load(config_file)
 
 
 def parse_runtime_args():

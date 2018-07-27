@@ -11,10 +11,7 @@ install:
 build: off
 
 test_script:
-  # Test not being able to find a config file
-  - coverage run --source='.' run_twitchgamenotify.py --print-to-terminal
-
-  # Test normally
+  # Test
   - cp config.yaml.example config.yaml
   - coverage run --source='.' run_twitchgamenotify.py --print-to-terminal
 
