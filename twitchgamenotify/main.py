@@ -9,6 +9,7 @@ from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
     parse_runtime_args,)
+from twitchgamenotify.twitch_api import TwitchApi
 from twitchgamenotify.version import NAME
 
 
@@ -33,8 +34,8 @@ def main():
     if not cli_args.print_to_terminal:
         notify2.init(NAME)
 
-    # Loop every N seconds - find some way to exit gracefully
-    # Inside loop call API a bunch
+    # Connect to the API
+    twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
 
     # TODO: debug message
     if not cli_args.print_to_terminal:
