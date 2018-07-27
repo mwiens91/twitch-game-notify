@@ -1,15 +1,65 @@
 """Contains configuration related functions."""
 
 import argparse
-from twitchgamenotify.constants import LOGLEVEL_CHOICES, LOGLEVEL_DICT, WARNING
+import os.path
+from xdg import XDG_CONFIG_HOME
+from twitchgamenotify.constants import (
+    CONFIG_FILE_NAME,
+    LOGLEVEL_CHOICES,
+    LOGLEVEL_DICT,
+    PROJECT_BASE_DIR,
+    WARNING,)
 from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
 
 
+class ConfigFileNotFound(Exception):
+    """Raised when a config file can't be found."""
+    pass
+
+
 class TranslateLogLevelAction(argparse.Action):
-    """Sets the logging number given loglevel string."""
+    """argparse action to translate loglevel to a number."""
     def __call__(self, parser, namespace, values, option_string=None):
         """Set a logging loglevel number."""
         setattr(namespace, self.dest, LOGLEVEL_DICT[values])
+
+
+def find_config_file():
+    """Find and return the path of a config file.
+
+    The config file looked for is "config.yaml" and it is looked for at
+    the base of the respository first (if you're running from source),
+    and then in $XDG_CONFIG_HOME/twitch-game-notify/ (XDG_CONFIG_HOME
+    defaults to $HOME/.config).
+
+    Returns:
+        A string containing the absolute path to the config file.
+    Raises:
+        ConfigFileNotFound: A config file couldn't be found.
+    """
+    # Check the base of the project
+    config_test = os.path.join(PROJECT_BASE_DIR, CONFIG_FILE_NAME)
+
+    if os.path.exists(config_test):
+        return config_test
+
+    # Check XDG_CONFIG_HOME
+    config_test = os.path.join(XDG_CONFIG_HOME, CONFIG_FILE_NAME)
+
+    if os.path.exists(config_test):
+        return config_test
+
+    # Couldn't find anything :thinking:
+    raise ConfigFileNotFound
+
+
+def parse_config_file():
+    """Find and parse a config file."""
+    # Find the config file first
+    try:
+        find_config_file()
+    except ConfigFileNotFound:
+        print(">:0")
 
 
 def parse_runtime_args():

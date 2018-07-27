@@ -3,7 +3,9 @@
 import time
 import threading
 import notify2
-from twitchgamenotify.configuration import parse_runtime_args
+from twitchgamenotify.configuration import (
+    parse_config_file,
+    parse_runtime_args,)
 from twitchgamenotify.version import NAME
 
 
@@ -13,6 +15,7 @@ def main():
     cli_args = parse_runtime_args()
 
     # Read config file
+    config_dict = parse_config_file()
 
     # Set up the notifier
     if not cli_args.print_to_terminal:

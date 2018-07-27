@@ -11,8 +11,13 @@ install:
 build: off
 
 test_script:
-  # Test
+  # Test not being able to find a config file
+  - coverage run --source='.' run_twitchgamenotify.py --print-to-terminal
+
+  # Test normally
+  - cp config.yaml.example config.yaml
   - coverage run --source='.' run_twitchgamenotify.py --print-to-terminal
 
 after_test:
+  # Upload coverage data to CodeCov
   - codecov
