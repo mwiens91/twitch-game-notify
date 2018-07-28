@@ -67,4 +67,4 @@ def main():
                 # Wait before querying again
                 time.sleep(config_dict['query-period'])
         except KeyboardInterrupt:
-            logging.critical("Exitting %s", NAME)
+            logging.info("Exitting %s", NAME)
