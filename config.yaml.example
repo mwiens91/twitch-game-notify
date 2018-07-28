@@ -2,15 +2,18 @@
 
 # How often to query, in seconds. Note that each Client-ID is allowed 30
 # queries per minute (or a query every 0.5 seconds).
-query-period: 1
+query-period: 5
 
 # Twitch API authorization - see https://dev.twitch.tv/docs/api/
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 
-# Streamers: a list of streamer user IDs, and for each, which game IDs
-# to notify about
+# Streamers: a list of streamer login names, and for each, which game
+# IDs to notify about
 streamers:
-  "121059319":     # MOONMOON_OW
+  "moonmoon_ow":   # MOONMOON_OW
     game-ids:      # game IDs to notify about
       - "*"        # everything
       - "!33214"   # except for Fortnite
+  "macie_jay":     # Macie_Jay
+    game-ids:
+      - "*"

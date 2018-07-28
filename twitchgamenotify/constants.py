@@ -24,3 +24,6 @@ LOGLEVEL_DICT = {CRITICAL: logging.CRITICAL,
                  WARNING: logging.WARNING,
                  INFO: logging.INFO,
                  DEBUG: logging.DEBUG,}
+
+# Twitch base API URL
+TWITCH_BASE_API_URL = 'https://api.twitch.tv/helix'
