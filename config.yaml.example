@@ -6,3 +6,10 @@ query-period: 1
 
 # Twitch API authorization - see https://dev.twitch.tv/docs/api/
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
+
+# Streamers: a list of streamer user IDs, and for each, which game IDs
+# to notify about
+streamers:
+  - 121059319:     # MOONMOON_OW
+    - "*"          # notify me about everything
+    - "!33214"     # except for Fortnite
