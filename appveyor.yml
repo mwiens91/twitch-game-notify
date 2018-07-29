@@ -26,7 +26,8 @@ test_script:
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
-  - sudo python3 setup.py install
+  - coverage run --source='.' setup.py install
+  - rm config.yaml
   - twitch-game-notify --one-shot --print-to-terminal
   - twitch-game-notify --one-shot --print-to-terminal --loglevel info
   - twitch-game-notify --one-shot --print-to-terminal --no-caching

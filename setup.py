@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from setuptools import setup
 from twitchgamenotify.version import NAME, DESCRIPTION, VERSION
 
