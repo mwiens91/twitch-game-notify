@@ -17,3 +17,32 @@ streamers:
   "macie_jay":     # Macie_Jay
     game-ids:
       - "*"
+
+# For convenience, here are some of the IDs of some popular games on
+# Twitch (grabbed on 2018-07-28):
+
+# 33214: Fortnite
+# 21779: League of Legends
+# 29595: Dota 2
+# 494717: IRL
+# 488552: Overwatch
+# 18122: World of Warcraft
+# 460630: Tom Clancy's Rainbow Six: Siege
+# 32399: Counter-Strike: Global Offensive
+# 493057: PLAYERUNKNOWN'S BATTLEGROUNDS
+# 138585: Hearthstone
+# 32982: Grand Theft Auto V
+# 32959: Heroes of the Storm
+# 488632: Enter the Gungeon
+# 490422: StarCraft II
+# 458781: No Man's Sky
+# 491931: Escape From Tarkov
+# 9234: Casino
+# 459931: Old School RuneScape
+# 497057: Destiny 2
+# 491487: Dead by Daylight
+# 16282: Super Smash Bros. Melee
+# 488191: Creative
+# 66170: Warframe
+# 492433: Left Alone
+# 27471: Minecraft
