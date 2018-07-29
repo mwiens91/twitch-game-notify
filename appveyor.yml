@@ -3,12 +3,11 @@ image: ubuntu
 install:
   # Install pip requirements and D-Bus dependencies
   - sudo apt update
-  - sudo apt install -y python3-pip libdbus-1-dev libdbus-glib-1-dev
+  - sudo apt install -y python3-dev python3-pip libdbus-1-dev libdbus-glib-1-dev
   - pip3 install -r requirements.txt
 
   # Code cov
   - pip3 install codecov
-  - sudo pip3 install codecov
 
   # Inject Twitch Client ID into config
   - sed -i 's@p0gch4mp101fy451do9uod1s1x9i4a@'"$TWITCH_API_CLIENT_ID"'@' config.yaml.example
