@@ -20,7 +20,19 @@ streamers:
     include:
       - "*"        # notify me when Moon plays any game
     exclude:
-      - "33214"   # except for Fortnite
+      - "33214"    # except for Fortnite
+  "shroud":
+    include:
+      - "*"
+    exclude:
+      - "493057"
+      - "33214"
+      - "493057"
+  "loltyler1":
+    include:
+      - "*"
+    exclude:
+      - "21779"
 
 # For convenience, here are some of the IDs of some popular games on
 # Twitch (grabbed on 2018-07-28):
