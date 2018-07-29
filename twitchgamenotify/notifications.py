@@ -42,11 +42,19 @@ def send_notification_to_dbus(streamer_name, stream_title, game_name):
 def process_notifications(
         streamers,
         twitch_api,
+        names_cache=None,
         streamers_previous_game=None,
         print_to_terminal=False):
     """Query the Twitch API for all streamers and display notications.
 
     Args:
+        names_cache: An optional dictionary containing cached names for
+            games and streamers. For example:
+
+            {"games": {"460630": "Tom Clancy's Rainbow Six: Siege"},
+             "streamers": {"macie_jay": "Macie_Jay"}}
+
+            Defaults to None.
         print_to_terminal: An optional boolean signalling whether to
             print to the terminal instead of passing a message to D-Bus.
             Defaults to False.
@@ -115,11 +123,30 @@ def process_notifications(
             # Game not in the include list
             continue
 
-        # Gather info about the stream
-        streamer_display_name = (
-            twitch_api.get_streamer_display_name(streamer_login_name))
+        # Gather info about the stream. Lookup info in the cache first
+        # if it's available.
+        if names_cache is not None:
+            try:
+                streamer_display_name = (
+                    names_cache['streamers'][streamer_login_name])
+            except KeyError:
+                streamer_display_name = (
+                    twitch_api.get_streamer_display_name(streamer_login_name))
+                names_cache['streamers'][streamer_login_name] = (
+                    streamer_display_name)
+
+            try:
+                game_title = names_cache['games'][game_id]
+            except KeyError:
+                game_title = twitch_api.get_game_title(game_id)
+                names_cache['games'][game_id] = game_title
+        else:
+            streamer_display_name = (
+                twitch_api.get_streamer_display_name(streamer_login_name))
+            game_title = twitch_api.get_game_title(game_id)
+
+        # Title is never cached
         stream_title = info['title']
-        game_title = twitch_api.get_game_title(game_id)
 
         # Send a notification
         if print_to_terminal:

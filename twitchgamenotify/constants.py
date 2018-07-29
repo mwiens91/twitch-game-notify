@@ -14,6 +14,7 @@ PROJECT_CONFIG_HOME = os.path.join(XDG_CONFIG_HOME, 'twitch-game-notify')
 
 # Config file names
 CONFIG_FILE_NAME = 'config.yaml'
+CACHE_FILE_NAME = 'cache.json'
 
 # Loglevel CLI options
 CRITICAL = 'critical'

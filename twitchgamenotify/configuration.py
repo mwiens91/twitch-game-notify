@@ -2,13 +2,13 @@
 
 import argparse
 import os.path
-from xdg import XDG_CONFIG_HOME
 import yaml
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
     LOGLEVEL_CHOICES,
     LOGLEVEL_DICT,
     PROJECT_BASE_DIR,
+    PROJECT_CONFIG_HOME,
     WARNING,)
 from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
 
@@ -91,6 +91,10 @@ def parse_runtime_args():
         '--one-shot',
         action='store_true',
         help="query once then exit")
+    parser.add_argument(
+        '--no-caching',
+        action='store_true',
+        help="don't cache static API data")
     parser.add_argument(
         '--print-to-terminal',
         action='store_true',

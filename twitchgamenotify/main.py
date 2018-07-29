@@ -1,10 +1,14 @@
 """Contains the main function."""
 
+import atexit
 import logging
 import time
 import threading
 import sys
 import notify2
+from twitchgamenotify.cache import (
+    load_cache,
+    save_cache,)
 from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
@@ -24,6 +28,14 @@ def main():
     logging.basicConfig(
         format='%(levelname)s: %(message)s',
         level=cli_args.loglevel,)
+
+    # Load cached static API data
+    if not cli_args.no_caching:
+        # Load the cache
+        cache_dict = load_cache()
+
+        # Create a hook to save the cache when exiting the program
+        atexit.register(save_cache, cache_dict)
 
     # Read config file
     try:
@@ -53,15 +65,21 @@ def main():
         # Loop until we hit a keyboard interrupt
         try:
             while True:
-                # Query
+                # Set up arguments to give process_notifcations
+                kwargs = dict(
+                    print_to_terminal=cli_args.print_to_terminal,
+                    streamers=config_dict['streamers'],
+                    streamers_previous_game=(
+                        streamers_last_seen_playing_dict),
+                    twitch_api=twitch_api,)
+
+                if not cli_args.no_caching:
+                    kwargs['names_cache'] = cache_dict
+
+                # Process any notifications
                 threading.Thread(
                     target=process_notifications,
-                    kwargs=dict(
-                        print_to_terminal=cli_args.print_to_terminal,
-                        streamers=config_dict['streamers'],
-                        streamers_previous_game=(
-                            streamers_last_seen_playing_dict),
-                        twitch_api=twitch_api,),).start()
+                    kwargs=kwargs,).start()
 
                 # Wait before querying again
                 time.sleep(config_dict['query-period'])

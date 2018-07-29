@@ -18,6 +18,7 @@ test_script:
   # Test
   - cp config.yaml.example config.yaml
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
+  - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-cache
 
 after_test:
   # Upload coverage data to CodeCov
