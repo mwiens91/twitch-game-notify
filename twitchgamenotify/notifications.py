@@ -1,6 +1,7 @@
 """Functions for processing and displaying notifications."""
 
 import datetime
+import time
 import notify2
 from twitchgamenotify.twitch_api import FailedHttpRequest
 
@@ -33,8 +34,9 @@ def send_notification_to_dbus(streamer_name, stream_title, game_name):
         game_name: A string containing the name of the game.
     """
     notify2.Notification(
-        streamer_name,
-        "%s\nPlaying: %s" % (stream_title, game_name)).show()
+        streamer_name + " @ " + time.strftime('%H:%M'),
+        "Title: %s\nPlaying: %s" % (stream_title, game_name)
+        ).show()
 
 
 def process_notifications(streamers, twitch_api, print_to_terminal=False):
