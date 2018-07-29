@@ -40,16 +40,16 @@ def find_config_file():
         ConfigFileNotFound: A config file couldn't be found.
     """
     # Check the base of the project
-    config_test = os.path.join(PROJECT_BASE_DIR, CONFIG_FILE_NAME)
+    config_path = os.path.join(PROJECT_BASE_DIR, CONFIG_FILE_NAME)
 
-    if os.path.exists(config_test):
-        return config_test
+    if os.path.exists(config_path):
+        return config_path
 
     # Check XDG_CONFIG_HOME
-    config_test = os.path.join(XDG_CONFIG_HOME, CONFIG_FILE_NAME)
+    config_path = os.path.join(PROJECT_CONFIG_HOME, CONFIG_FILE_NAME)
 
-    if os.path.exists(config_test):
-        return config_test
+    if os.path.exists(config_path):
+        return config_path
 
     # Couldn't find anything :thinking:
     raise ConfigFileNotFound
