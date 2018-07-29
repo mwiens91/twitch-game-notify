@@ -3,7 +3,7 @@ image: ubuntu
 install:
   # Install pip requirements and D-Bus dependencies
   - sudo apt update
-  - sudo apt install -y python3-dev python3-pip libdbus-1-dev libdbus-glib-1-dev
+  - sudo apt install -y python3-pip libdbus-1-dev libdbus-glib-1-dev
   - pip3 install -r requirements.txt
 
   # Code cov
@@ -26,7 +26,7 @@ test_script:
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
-  - sudo coverage run --source='.' setup.py install
+  - coverage run --source='.' setup.py --prefix ~/.local install
   - twitch-game-notify --one-shot --print-to-terminal
   - twitch-game-notify --one-shot --print-to-terminal --loglevel info
   - twitch-game-notify --one-shot --print-to-terminal --no-caching
