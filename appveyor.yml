@@ -24,9 +24,11 @@ test_script:
   - cp config.yaml.example config.yaml
   - coverage run --source='.' run_twitchgamenotify.py --print-config
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
+  - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
   - sudo pip3 install twitch-game-notify
   - twitch-game-notify --one-shot --print-to-terminal
+  - twitch-game-notify --one-shot --print-to-terminal --loglevel info
   - twitch-game-notify --one-shot --print-to-terminal --no-caching
 
 after_test:
