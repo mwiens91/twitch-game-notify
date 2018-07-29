@@ -23,6 +23,7 @@ setup(
     },
     install_requires=[
         'dbus-python',
+        'notify2',
         'PyYAML',
         'requests',
         'xdg',
