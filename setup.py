@@ -26,7 +26,8 @@ setup(
         'Operating System :: Unix',
         'Programming Language :: Python :: 3 :: Only',
     ],
-    packages=['twitchgamenotify'],
+    packages=['twitchgamenotify', 'static'],
+    package_data={'static': ['twitch.svg']},
     entry_points={
         'console_scripts': ['twitch-game-notify = twitchgamenotify.main:main'],
     },

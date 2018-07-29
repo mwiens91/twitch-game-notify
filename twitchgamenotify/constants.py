@@ -8,6 +8,12 @@ import os
 PROJECT_BASE_DIR = (
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Path to the app indicator icon
+APP_INDICATOR_SVG_PATH = os.path.join(
+    PROJECT_BASE_DIR,
+    'static/',
+    'twitch.svg',)
+
 # Base of XDG config files
 try:
     PROJECT_CONFIG_HOME = os.path.join(

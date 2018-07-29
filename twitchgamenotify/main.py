@@ -48,6 +48,20 @@ def main():
     if not cli_args.print_to_terminal:
         notify2.init(NAME)
 
+    # Set up app indicator and run it in a separate thread
+    if not cli_args.one_shot or not cli_args.no_app_indicator:
+        # Import this here to GTK-incompatible machines are still
+        # supported
+        from twitchgamenotify.app_indicator import AppIndicator
+
+        indicator = AppIndicator()
+
+        # Kill the indicator when we quit
+        atexit.register(indicator.stop)
+
+        # Start the indicator in its own thread
+        threading.Thread(target=indicator.start, daemon=True).start()
+
     # Connect to the API
     twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
 

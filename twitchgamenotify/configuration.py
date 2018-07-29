@@ -111,6 +111,10 @@ def parse_runtime_args():
         action='store_true',
         help="query once then exit")
     parser.add_argument(
+        '--no-app-indicator',
+        action='store_true',
+        help="don't launch an app indicator")
+    parser.add_argument(
         '--no-caching',
         action='store_true',
         help="don't cache static API data")
