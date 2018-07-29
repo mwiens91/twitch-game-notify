@@ -8,6 +8,7 @@ install:
 
   # Code cov
   - pip3 install codecov
+  - sudo pip3 install codecov
 
   # Inject Twitch Client ID into config
   - sed -i 's@p0gch4mp101fy451do9uod1s1x9i4a@'"$TWITCH_API_CLIENT_ID"'@' config.yaml.example
