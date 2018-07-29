@@ -2,7 +2,6 @@
 
 import logging
 import os
-from xdg import XDG_CONFIG_HOME
 
 
 # Base of the repository/project
@@ -10,7 +9,15 @@ PROJECT_BASE_DIR = (
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Base of XDG config files
-PROJECT_CONFIG_HOME = os.path.join(XDG_CONFIG_HOME, 'twitch-game-notify')
+try:
+    PROJECT_CONFIG_HOME = os.path.join(
+        os.environ['XDG_CONFIG_HOME'],
+        'twitch-game-notify')
+except KeyError:
+    PROJECT_CONFIG_HOME = os.path.join(
+        os.environ['HOME'],
+        '.config/',
+        'twitch-game-notify',)
 
 # Config file names
 CONFIG_FILE_NAME = 'config.yaml'
