@@ -35,6 +35,7 @@ def find_config_file():
 
     Returns:
         A string containing the absolute path to the config file.
+
     Raises:
         ConfigFileNotFound: A config file couldn't be found.
     """

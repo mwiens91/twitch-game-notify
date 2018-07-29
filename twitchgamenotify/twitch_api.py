@@ -58,10 +58,19 @@ class TwitchApi:
         Arg:
             streamer_login_name: A string specifying the streamer's user
                 login name. E.g., moonmoon_ow.
+
         Returns:
             A dictionary of information about the queried stream
-            including whether it's live, its title, the current game's
-            game ID.
+            including whether it's live, its title, and the current
+            game's game ID. For example:
+
+            {'live': True,
+             'title': "Macie Jay Charm PogChamp",
+             'game_id': '460630'}
+
+        Raises:
+            FailedHttpRequest: The status code indicates the HTTP
+                request was not successful.
         """
         # Make a request to the Twitch API
         r = self.session.get(
