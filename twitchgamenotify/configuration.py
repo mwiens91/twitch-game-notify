@@ -40,7 +40,7 @@ class PrintExampleConfigAction(argparse.Action):
                 file=sys.stderr,)
             sys.exit(1)
         else:
-            print(r.content.decode("utf-8"))
+            print(r.content.decode())
             sys.exit(0)
 
 
