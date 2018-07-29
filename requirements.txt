@@ -3,6 +3,8 @@ chardet==3.0.4
 dbus-python==1.2.8
 idna==2.7
 notify2==0.3.1
+pycairo==1.17.1
+PyGObject==3.28.3
 PyYAML==3.13
 requests==2.19.1
 urllib3==1.23

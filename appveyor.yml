@@ -1,14 +1,22 @@
 image: ubuntu
 
 install:
-  # Install pip requirements and D-Bus dependencies
+  # Install dbus-python dependencies
   - sudo apt update
-  - sudo apt install -y python3-pip libdbus-1-dev libdbus-glib-1-dev
-  - pip3 install -r requirements.txt
+  - sudo apt install -y libdbus-1-dev libdbus-glib-1-dev
+
+  # Install PyGObject dependencies
+  - sudo apt install -y libcairo2-dev libgirepository1.0-dev
+
+  # Install pip stuff needed to run tests
+  - sudo apt install -y python3-pip
   - pip3 install -U setuptools
 
-  # Code cov
+  # Code codecov package
   - pip3 install codecov
+
+  # Install project requirements
+  - pip3 install -r requirements.txt
 
   # Inject Twitch Client ID into config
   - sed -i 's@p0gch4mp101fy451do9uod1s1x9i4a@'"$TWITCH_API_CLIENT_ID"'@' config.yaml.example

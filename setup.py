@@ -33,6 +33,7 @@ setup(
     install_requires=[
         'dbus-python',
         'notify2',
+        'PyGObject',
         'PyYAML',
         'requests',
     ],
