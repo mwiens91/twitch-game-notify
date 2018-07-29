@@ -8,6 +8,9 @@ install:
   # Install PyGObject dependencies
   - sudo apt install -y libcairo2-dev libgirepository1.0-dev
 
+  # Install PyGObject dependencies required for building
+  - sudo apt install -y gir1.2-gtk-3.0 gir1.2-appindicator3-0.1
+
   # Install pip stuff needed to run tests
   - sudo apt install -y python3-pip
   - pip3 install -U setuptools
