@@ -24,7 +24,8 @@ CONFIG_FILE_NAME = 'config.yaml'
 CACHE_FILE_NAME = 'cache.json'
 
 # URL for example config file on Github
-EXAMPLE_CONFIG_FILE_URL = 'https://raw.githubusercontent.com/mwiens91/twitch-game-notify/master/config.yaml.example'
+EXAMPLE_CONFIG_FILE_URL = (
+    'https://raw.githubusercontent.com/mwiens91/twitch-game-notify/master/config.yaml.example')
 
 # Loglevel CLI options
 CRITICAL = 'critical'

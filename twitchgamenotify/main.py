@@ -51,31 +51,30 @@ def main():
     # Connect to the API
     twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
 
-    # Query (and possibly notify) only once or periodically
-    if cli_args.one_shot:
-        process_notifications(
-            print_to_terminal=cli_args.print_to_terminal,
-            streamers=config_dict['streamers'],
-            twitch_api=twitch_api,)
-    else:
-        # Save what game a streamer was playing last so we don't re-notify
+    # Set up arguments to give process_notifcations
+    kwargs = dict(
+        print_to_terminal=cli_args.print_to_terminal,
+        streamers=config_dict['streamers'],
+        twitch_api=twitch_api,)
+
+    if not cli_args.no_caching:
+        kwargs['names_cache'] = cache_dict
+
+    if not cli_args.one_shot:
+        # Remember what game a streamer was playing last so we don't
+        # re-notify
         streamers_last_seen_playing_dict = (
             {streamer: "" for streamer in config_dict['streamers'].keys()})
 
+        kwargs['streamers_previous_game'] = streamers_last_seen_playing_dict
+
+    # Query (and possibly notify) only once or periodically
+    if cli_args.one_shot:
+        process_notifications(**kwargs)
+    else:
         # Loop until we hit a keyboard interrupt
         try:
             while True:
-                # Set up arguments to give process_notifcations
-                kwargs = dict(
-                    print_to_terminal=cli_args.print_to_terminal,
-                    streamers=config_dict['streamers'],
-                    streamers_previous_game=(
-                        streamers_last_seen_playing_dict),
-                    twitch_api=twitch_api,)
-
-                if not cli_args.no_caching:
-                    kwargs['names_cache'] = cache_dict
-
                 # Process any notifications
                 threading.Thread(
                     target=process_notifications,
