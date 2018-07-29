@@ -89,10 +89,12 @@ def main():
         try:
             while True:
                 # Query
-                query_iteration(
-                    print_to_terminal=cli_args.print_to_terminal,
-                    streamers=config_dict['streamers'],
-                    twitch_api=twitch_api,)
+                threading.Thread(
+                    target=query_iteration,
+                    kwargs=dict(
+                        print_to_terminal=cli_args.print_to_terminal,
+                        streamers=config_dict['streamers'],
+                        twitch_api=twitch_api,),).start()
 
                 # Wait before querying again
                 time.sleep(config_dict['query-period'])
