@@ -35,6 +35,5 @@ setup(
         'notify2',
         'PyYAML',
         'requests',
-        'xdg',
     ],
 )
