@@ -1,9 +1,12 @@
 # twitch-game-notify config file
 
 # This config file is looked for at
+#
 # - repository_base/config.yaml (if running from source)
 # - $XDG_CONFIG_HOME/twitch-game-notify/config.yaml
-# - $HOME/.config/twitch-game-notify/config.yaml
+#
+# Note that if $XDG_CONFIG_HOME is not defined then $HOME/.config/ is
+# used instead.
 
 # How often to send queries to the Twitch API, in seconds. Note that
 # each Client-ID is allowed 30 queries per minute (or a query every 0.5
