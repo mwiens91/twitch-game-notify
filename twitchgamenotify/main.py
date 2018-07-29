@@ -9,48 +9,11 @@ from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
     parse_runtime_args,)
+from twitchgamenotify.notifications import process_notifications
 from twitchgamenotify.twitch_api import (
-    FailedHttpRequest,
     TwitchApi,)
 from twitchgamenotify.version import NAME
 
-
-def query_iteration(streamers, twitch_api, print_to_terminal=False):
-    """Query the Twitch API once.
-
-    Arg:
-        print_to_terminal: A boolean signalling whether to print to the
-            terminal instead of passing a message to D-Bus.
-        streamers: A dictionary of streamers where the keys are strings
-            containing the streamer's login name and the values are
-            dictionaries containing the user's settings for the
-            streamer.
-        twitch_api: An authenticated TwitchApi object to interact with
-            Twitch's API.
-    """
-    # TODO: test functionality - remove me!
-    for streamer_login_name in streamers.keys():
-        try:
-            info = twitch_api.get_online_stream_info(streamer_login_name)
-
-            if not info['live']:
-                continue
-
-            display_name = (
-                twitch_api.get_streamer_display_name(streamer_login_name))
-            game_title = twitch_api.get_game_title(info['game_id'])
-
-            msg = (
-                display_name,
-                "%s\nPlaying: %s" % (info['title'], game_title))
-
-            if print_to_terminal:
-                print("%s: %s" % msg)
-            else:
-                notify2.Notification(*msg).show()
-        except FailedHttpRequest:
-            # The sender of this exception has already logged an error.
-            pass
 
 def main():
     """The main function."""
@@ -76,12 +39,9 @@ def main():
     # Connect to the API
     twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
 
-    # Initialize some sort of data structure to keep track of what
-    # selected streamers are playing - maybe pickle this too?
-
     # Query (and possibly notify) periodically
     if cli_args.one_shot:
-        query_iteration(
+        process_notifications(
             print_to_terminal=cli_args.print_to_terminal,
             streamers=config_dict['streamers'],
             twitch_api=twitch_api,)
@@ -90,7 +50,7 @@ def main():
             while True:
                 # Query
                 threading.Thread(
-                    target=query_iteration,
+                    target=process_notifications,
                     kwargs=dict(
                         print_to_terminal=cli_args.print_to_terminal,
                         streamers=config_dict['streamers'],
