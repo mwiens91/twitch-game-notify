@@ -97,3 +97,29 @@ class TwitchApi:
                 game_id=r_data[0]['game_id'],)
 
         return stream_info
+
+    def get_streamer_display_name(self, streamer_login_name):
+        """Get a streamer's display name given their login name.
+
+        Arg:
+            streamer_login_name: A string specifying the streamer's user
+                login name. E.g., moonmoon_ow.
+
+        Returns:
+            A string containing the streamer's display name.
+
+        Raises:
+            FailedHttpRequest: The status code indicates the HTTP
+                request was not successful.
+        """
+        # Make a request to the Twitch API
+        r = self.session.get(
+            TWITCH_BASE_API_URL
+            + '/users?login='
+            + streamer_login_name)
+
+        # Verify that the HTTP method was okay
+        self.check_http_status_code(r.status_code, r.url)
+
+        # Return the display name
+        return r.json()['data'][0]['display_name']

@@ -32,8 +32,10 @@ def query_iteration(streamers, twitch_api, print_to_terminal=False):
     for streamer_login_name in streamers.keys():
         try:
             info = twitch_api.get_online_stream_info(streamer_login_name)
+            display_name = (
+                twitch_api.get_streamer_display_name(streamer_login_name))
 
-            msg = (streamer_login_name, info['title'],)
+            msg = (display_name, info['title'],)
 
             if print_to_terminal:
                 print("%s: %s" % msg)
