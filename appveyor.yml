@@ -12,13 +12,22 @@ install:
   # Inject Twitch Client ID into config
   - sed -i 's@p0gch4mp101fy451do9uod1s1x9i4a@'"$TWITCH_API_CLIENT_ID"'@' config.yaml.example
 
+  # Set up config files for running from source and with PyPI install
+  - cp config.yaml.example config.yaml
+  - mkdir -p $HOME/.config/twitch-game-notify
+  - cp config.yaml $HOME/.config/twitch-game-notify/config.yaml
+
 build: off
 
 test_script:
   # Test
   - cp config.yaml.example config.yaml
+  - coverage run --source='.' run_twitchgamenotify.py --print-config
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
+  - sudo pip3 install twitch-game-notify
+  - twitch-game-notify --one-shot --print-to-terminal
+  - twitch-game-notify --one-shot --print-to-terminal --no-caching
 
 after_test:
   # Upload coverage data to CodeCov
