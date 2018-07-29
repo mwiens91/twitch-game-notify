@@ -53,7 +53,7 @@ def process_notifications(streamers, twitch_api, print_to_terminal=False):
             Twitch's API.
     """
     # Look up info about each streamer's stream
-    for streamer_login_name in streamers.keys():
+    for streamer_login_name, games in streamers.items():
         try:
             # Get info about stream
             info = twitch_api.get_online_stream_info(streamer_login_name)
@@ -66,11 +66,21 @@ def process_notifications(streamers, twitch_api, print_to_terminal=False):
         if not info['live']:
             continue
 
+        # Check if this is a game to notify about
+        game_id = info['game_id']
+
+        if "*" in games['include']:
+            # Check if we need to exclude any games
+            if 'exclude' in games and game_id in games['exclude']:
+                continue
+        elif game_id not in games['include']:
+            continue
+
         # Gather info
         streamer_display_name = (
             twitch_api.get_streamer_display_name(streamer_login_name))
         stream_title = info['title']
-        game_title = twitch_api.get_game_title(info['game_id'])
+        game_title = twitch_api.get_game_title(game_id)
 
         # Send the notification
         if print_to_terminal:
