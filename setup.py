@@ -1,10 +1,17 @@
 from setuptools import setup
 from twitchgamenotify.version import NAME, DESCRIPTION, VERSION
 
+
+# Parse readme to include in PyPI page
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(
     name=NAME,
     version=VERSION,
-    description=DESCRIPTION,
+    description=DESCRIPTION.capitalize(),
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/mwiens91/twitch-game-notify',
     author='Matt Wiens',
     author_email='mwiens91@gmail.com',
