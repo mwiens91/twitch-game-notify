@@ -49,7 +49,7 @@ def main():
         notify2.init(NAME)
 
     # Set up app indicator and run it in a separate thread
-    if not cli_args.one_shot or not cli_args.no_app_indicator:
+    if not cli_args.one_shot or cli_args.no_app_indicator:
         # Import this here to GTK-incompatible machines are still
         # supported
         from twitchgamenotify.app_indicator import AppIndicator
