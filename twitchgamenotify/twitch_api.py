@@ -123,3 +123,28 @@ class TwitchApi:
 
         # Return the display name
         return r.json()['data'][0]['display_name']
+
+    def get_game_title(self, game_id):
+        """Get a game's title given its ID.
+
+        Arg:
+            game_id: A string containing a Twitch game ID.
+
+        Returns:
+            A string containing the game's title.
+
+        Raises:
+            FailedHttpRequest: The status code indicates the HTTP
+                request was not successful.
+        """
+        # Make a request to the Twitch API
+        r = self.session.get(
+            TWITCH_BASE_API_URL
+            + '/games?id='
+            + game_id)
+
+        # Verify that the HTTP method was okay
+        self.check_http_status_code(r.status_code, r.url)
+
+        # Return the game title
+        return r.json()['data'][0]['name']
