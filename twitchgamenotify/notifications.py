@@ -1,7 +1,13 @@
 """Functions for processing and displaying notifications."""
 
+import datetime
 import notify2
 from twitchgamenotify.twitch_api import FailedHttpRequest
+
+
+# ANSI escape for bold
+ANSI_BOLD = '\033[1m'
+ANSI_END = '\033[0m'
 
 
 def print_notification_to_terminal(streamer_name, stream_title, game_name):
@@ -12,7 +18,10 @@ def print_notification_to_terminal(streamer_name, stream_title, game_name):
         stream_title: A string containing the title of the stream.
         game_name: A string containing the name of the game.
     """
-    print("%s\n%s\n%s" % (streamer_name, stream_title, game_name))
+    print(ANSI_BOLD + streamer_name + ANSI_END, end='')
+    print(" @ " + datetime.datetime.now().isoformat())
+    print("Title: %s" % stream_title)
+    print("Playing: %s" % game_name)
 
 
 def send_notification_to_dbus(streamer_name, stream_title, game_name):
