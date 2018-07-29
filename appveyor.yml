@@ -23,11 +23,12 @@ build: off
 test_script:
   # Test
   - cp config.yaml.example config.yaml
-  - coverage run --source='.' run_twitchgamenotify.py --print-config
-  - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal
-  - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
-  - coverage run --source='.' run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
-  - coverage run --source='.' setup.py install --prefix ~/.local
+  - coverage run run_twitchgamenotify.py --print-config
+  - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal
+  - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
+  - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal --no-caching
+  - coverage run ./setup.py test
+  - ./setup.py install --prefix ~/.local
   - twitch-game-notify --one-shot --print-to-terminal
   - twitch-game-notify --one-shot --print-to-terminal --loglevel info
   - twitch-game-notify --one-shot --print-to-terminal --no-caching
