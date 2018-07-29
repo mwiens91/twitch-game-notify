@@ -2,9 +2,12 @@
 
 import argparse
 import os.path
+import sys
+import requests
 import yaml
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
+    EXAMPLE_CONFIG_FILE_URL,
     LOGLEVEL_CHOICES,
     LOGLEVEL_DICT,
     PROJECT_BASE_DIR,
@@ -23,6 +26,22 @@ class TranslateLogLevelAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         """Set a logging loglevel number."""
         setattr(namespace, self.dest, LOGLEVEL_DICT[values])
+
+
+class PrintExampleConfigAction(argparse.Action):
+    """argparse action to print example config file."""
+    def __call__(self, parser, namespace, values, option_string=None):
+        """Download and print example config file."""
+        r = requests.get(EXAMPLE_CONFIG_FILE_URL)
+
+        if r.status_code != 200:
+            print(
+                "ERROR: Failed to download example config file!",
+                file=sys.stderr,)
+            sys.exit(1)
+        else:
+            print(r.content.decode("utf-8"))
+            sys.exit(0)
 
 
 def find_config_file():
@@ -95,6 +114,11 @@ def parse_runtime_args():
         '--no-caching',
         action='store_true',
         help="don't cache static API data")
+    parser.add_argument(
+        '--print-config',
+        nargs=0,
+        action=PrintExampleConfigAction,
+        help="downloads and prints example config file")
     parser.add_argument(
         '--print-to-terminal',
         action='store_true',
