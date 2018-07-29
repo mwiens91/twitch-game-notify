@@ -10,13 +10,14 @@ twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 # Streamers: a list of streamer login names, and for each, which game
 # IDs to notify about
 streamers:
-  "moonmoon_ow":   # MOONMOON_OW
-    game-ids:      # game IDs to notify about
-      - "*"        # everything
-      - "!33214"   # except for Fortnite
   "macie_jay":     # Macie_Jay
-    game-ids:
-      - "*"
+    include:
+      - "460630"   # notify my when Macie plays Rainbow Six: Siege
+  "moonmoon_ow":   # MOONMOON_OW
+    include:
+      - "*"        # notify me when Moon plays any game
+    exclude:
+      - "33214"   # except for Fortnite
 
 # For convenience, here are some of the IDs of some popular games on
 # Twitch (grabbed on 2018-07-28):
