@@ -37,7 +37,7 @@ class TwitchApi:
             http_request_url: A string containing the URL that was used
                 to make the completed HTTP request.
         Raises:
-            FailedHttpRequest: The status code indicates the HTTP
+            FailedHttpRequest: The status code indicated the HTTP
                 request was not successful.
         """
         try:
@@ -134,7 +134,7 @@ class TwitchApi:
             A string containing the game's title.
 
         Raises:
-            FailedHttpRequest: The status code indicates the HTTP
+            FailedHttpRequest: The status code indicated the HTTP
                 request was not successful.
         """
         # Make a request to the Twitch API
