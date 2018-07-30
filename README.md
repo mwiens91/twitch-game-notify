@@ -2,7 +2,206 @@
 [![codecov](https://codecov.io/gh/mwiens91/twitch-game-notify/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/twitch-game-notify)
 [![PyPI](https://img.shields.io/pypi/v/twitch-game-notify.svg)](https://pypi.org/project/twitch-game-notify/)
 
-
 # twitch-game-notify
 
-### NOTE: this is a work in progress!
+This is a Twitch notifier which notifies you when your favourite
+steamers play your favourite games. Officially, Ubuntu >= 16.04 is
+supported, but other Linux distros and possibly even Mac OSs may also
+work (contact me if you have it running on another distro or OS—I'm
+curious).
+
+With normal settings, this will send notifications to your existing
+notification handler when a streamer is playing a game you've specified:
+
+![notification](https://i.imgur.com/4MM61Pk.png)
+
+You'll also get a tray icon so you can easily quit the application:
+
+![tray-icon](https://i.imgur.com/uDdtJDa.png)
+
+## Installation
+
+We'll need to install a few dependencies first. I'll assume you're on
+Ubuntu.
+
+To get the dependencies needed for D-Bus notifications and for
+displaying an icon in the system tray, run
+
+```
+sudo apt install libdbus-1-dev libdbus-glib-1-dev \
+                 libcairo2-dev libgirepository1.0-dev
+```
+
+If you want to install twitch-game-notify globally on your machine (cf.
+running from source directly from
+[run_twitchgamenotify.py](run_twitchgamenotify.py)), install it using
+pip with
+
+```
+sudo pip3 install twitch-game-notify
+```
+
+Running the above command with root isn't strictly necessary, but it'll
+put the `twitch-game-notify` binary on your `$PATH`, which is nice.
+
+## Configuration
+
+Configuration files look like the following:
+
+```yaml
+query-period: 5
+twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
+streamers:
+  "macie_jay":     # Macie_Jay
+    include:
+      - "460630"   # notify my when Macie plays Rainbow Six: Siege
+  "moonmoon_ow":   # MOONMOON_OW
+    include:
+      - "*"        # notify me when Moon plays any game
+    exclude:
+      - "33214"    # except for Fortnite
+```
+
+There's a `query-period`, which specifies how often the main loop
+happens for querying the streamers you've specified (in seconds).
+There's a `twitch-api-client-id`, which we'll get to in a second. Then
+there's a list of streamers, which for each you specify what games you
+want to be notified about.
+
+### Setting up a configuration file
+
+twitch-game-notify looks for a configuration file at two paths:
+
+1. `$PROJECT_ROOT/config.yaml`
+2. `$XDG_CONFIG_HOME/twitch-game-notify/config.yaml`
+
+where `$PROJECT_ROOT` is the base of the twitch-game-notify project
+(which you generally only want to use if you're running from source),
+and `$XDG_CONFIG_HOME` defaults to `$HOME/.config`, if you don't have it
+defined.
+
+To get started, either copy the example configuration file
+[config.yaml.example](config.yaml.example) to one of the above locations
+(making sure to rename it to `config.yaml`) or run
+
+```
+twitch-game-notify --print-config > $DEST/config.yaml
+```
+
+which downloads the example configuration file from GitHub and prints it
+to the terminal, which you can then redirect to a file.
+
+### Getting a Twitch API client ID
+
+To get a Twitch client ID, you need to either create or link an existing
+Twitch account with [Twitch's dev portal](https://dev.twitch.tv/). Up to
+date instructions for obtaining a client ID can be found at
+[dev.twitch.tv/docs/authentication](https://dev.twitch.tv/docs/authentication/).
+
+When registering for a client ID, don't set a client secret; just make
+sure you don't share your client ID (i.e., keep it private).
+
+### Constructing the streamers list
+
+The streamers list has a bunch of streamer login names. For example,
+[MOONMOON_OW](https://www.twitch.tv/moonmoon_ow)'s login name is
+moonmoon_ow, which can be easily found from his stream's URL:
+
+```
+https://www.twitch.tv/moonmoon_ow
+```
+
+For each streamer you can include games you want to be notified about.
+For example,
+
+```yaml
+streamers:
+  "macie_jay":     # Macie_Jay
+    include:
+      - "460630"   # notify my when Macie plays Rainbow Six: Siege
+```
+
+where 460630 is the game ID for Tom Clancy's Rainbow Six: Siege.
+
+If you want to be notified when a streamer plays any game you can use
+`"*"`. For example,
+
+```yaml
+streamers:
+  "moonmoon_ow":   # MOONMOON_OW
+    include:
+      - "*"        # notify me when Moon plays any game
+```
+
+If you want to be notified about every game *except* specific games, you
+can also specify an `exclude` section along with `"*"`. For example,
+
+```yaml
+streamers:
+  "moonmoon_ow":   # MOONMOON_OW
+    include:
+      - "*"        # notify me when Moon plays any game
+    exclude:
+      - "33214"    # except for Fortnite
+```
+
+where 33214 is the game ID for Fortnite.
+
+You can find out what the game ID for a given game is by querying the
+Twitch API directly (see [their
+reference](https://dev.twitch.tv/docs/api/reference/#get-games) for
+how). For convenience, a list of popular games' IDs are listed in the
+example configuration file [config.yaml.example](config.yaml.example):
+
+```yaml
+# ARK: 489635
+# Always On: 499973
+# Arena of Valor: 498302
+# Black Desert Online: 386821
+# Blade and Soul: 20423
+# Borderlands: The Pre-Sequel!: 460041
+# Call of Duty: Black Ops III: 489401
+# Call of Duty: WWII: 496712
+# Casino: 9234
+# Chess: 743
+# Conan Exiles: 493551
+# Counter-Strike: Global Offensive: 32399
+# ...
+```
+
+## Usage
+
+Run twitch-game-notify with
+
+```
+twitch-game-notify
+```
+
+or directly with [run_twitchgamenotify.py](run_twitchgamenotify.py):
+
+```
+./run_twitchgamenotify.py
+```
+
+For a list of everything you can do with twitch-game-notify, run
+
+```
+twitch-game-notify --help
+```
+
+## Rate limits
+
+Using a Twitch API client ID allows for 30 API queries per minute. When
+you first start up twitch-game-notify, you're going to be using 3 API
+queries per online streamer that's playing a game you've specified. When
+you've been running twitch-game-notify for awhile, most of the static
+API data is going to have been cached and you're going be using about 1
+API query per online streamer playing a game you've specified.
+
+As a rough estimate, if you have `N` streamers on your list, you're
+going to want to have a `query-period` of something like `N` seconds.
+
+That said, there's *lots* of room for query optimization, so if you're
+not happy about the `query-period` that you need to use, please contact
+me or raise an issue and I'll cook up something where you can cut your
+`query-period` down by at least an order of magnitude.
