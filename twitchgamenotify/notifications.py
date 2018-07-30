@@ -1,6 +1,7 @@
 """Functions for processing and displaying notifications."""
 
 import datetime
+import logging
 import time
 import notify2
 from twitchgamenotify.twitch_api import FailedHttpRequest
@@ -82,10 +83,11 @@ def process_notifications(
         try:
             # Get info about stream
             info = twitch_api.get_online_stream_info(streamer_login_name)
-        except FailedHttpRequest:
-            # Bad HTTP request! The sender of this exception has already
-            # logged an error, so we don't need to do that here. Move on
-            # to the next streamer.
+        except FailedHttpRequest as e:
+            # Bad HTTP request! Log the error and move onto the next
+            # streamer!
+            logging.error(e.message)
+
             continue
 
         # If the streamer isn't live, record that they aren't playing

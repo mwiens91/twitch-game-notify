@@ -6,7 +6,6 @@ relatively small number of requests. JWT support can be developed at
 some point to allow for a higher volume of requests.
 """
 
-import logging
 import requests
 from twitchgamenotify.constants import TWITCH_BASE_API_URL
 
@@ -18,8 +17,9 @@ class FailedHttpRequest(Exception):
         # Call the parent class __init__
         super().__init__(message)
 
-        # Record the status code
+        # Record the status code and message
         self.status_code = http_status_code
+        self.message = message
 
 
 class TwitchApi:
@@ -54,8 +54,6 @@ class TwitchApi:
             message = (
                 "The HTTP request to %s failed with status code %s" %
                 (http_request_url, status_code,))
-
-            logging.error(message)
 
             raise FailedHttpRequest(
                 message=message,
