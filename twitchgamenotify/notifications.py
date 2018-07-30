@@ -5,6 +5,7 @@ import logging
 import time
 import notify2
 from twitchgamenotify.twitch_api import FailedHttpRequest
+from twitchgamenotify.version import NAME
 
 
 # ANSI escape sequence for bold text
@@ -87,6 +88,13 @@ def process_notifications(
             # Bad HTTP request! Log the error and move onto the next
             # streamer!
             logging.error(e.message)
+
+            if not print_to_terminal:
+                # Send a notification about the error, too
+                notify2.Notification(
+                    NAME + " @ " + time.strftime('%H:%M'),
+                    e.message,
+                    ).show()
 
             continue
 

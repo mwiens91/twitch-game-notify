@@ -50,9 +50,9 @@ class TwitchApi:
             # Make the the HTTP request was okay
             assert status_code == 200
         except AssertionError:
-            # Uh oh
+            # The HTTP request wasn't okay
             message = (
-                "The HTTP request to %s failed with status code %s" %
+                "An HTTP request to %s failed with status code %s" %
                 (http_request_url, status_code,))
 
             raise FailedHttpRequest(
