@@ -13,7 +13,13 @@ from twitchgamenotify.constants import TWITCH_BASE_API_URL
 
 class FailedHttpRequest(Exception):
     """An exception raised when an HTTP request failed."""
-    pass
+    def __init__(self, message, http_status_code):
+        """Record what the HTTP status code for the bad request was."""
+        # Call the parent class __init__
+        super().__init__(message)
+
+        # Record the status code
+        self.status_code = http_status_code
 
 
 class TwitchApi:
@@ -45,12 +51,15 @@ class TwitchApi:
             assert status_code == 200
         except AssertionError:
             # Uh oh
-            logging.error(
-                "The HTTP request to %s failed with status code %s",
-                http_request_url,
-                status_code,)
+            message = (
+                "The HTTP request to %s failed with status code %s" %
+                (http_request_url, status_code,))
 
-            raise FailedHttpRequest
+            logging.error(message)
+
+            raise FailedHttpRequest(
+                message=message,
+                http_status_code=status_code,)
 
     def get_online_stream_info(self, streamer_login_name):
         """Requests info about an online stream.
