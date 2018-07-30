@@ -13,7 +13,7 @@
 # seconds). Worst case scenario, each streamer requires 3 queries per
 # iteration (if the game name and streamer display name aren't cached).
 # Best case scenario, each streamer requires 1 query per iteration.
-query-period: 5
+query-period: 10
 
 # Twitch API authorization - see https://dev.twitch.tv/docs/api/
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
