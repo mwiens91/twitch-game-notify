@@ -132,10 +132,6 @@ class TwitchApi:
             {'live': True,
              'title': "Macie Jay Charm PogChamp",
              'game_id': '460630'}
-
-        Raises:
-            FailedHttpRequest: The status code indicates the HTTP
-                request was not successful.
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
@@ -169,10 +165,6 @@ class TwitchApi:
 
         Returns:
             A string containing the streamer's display name.
-
-        Raises:
-            FailedHttpRequest: The status code indicates the HTTP
-                request was not successful.
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
@@ -191,10 +183,6 @@ class TwitchApi:
 
         Returns:
             A string containing the game's title.
-
-        Raises:
-            FailedHttpRequest: The status code indicated the HTTP
-                request was not successful.
         """
         # Make a request to the Twitch API
         response = self.make_http_request(

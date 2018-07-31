@@ -6,14 +6,19 @@ import time
 import threading
 import sys
 import notify2
+import requests
 from twitchgamenotify.cache import (
     load_cache,
     save_cache,)
+from twitchgamenotify.constants import (
+    STARTING_CONNECTION_FAILURE_RETRY_TIME,)
 from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
     parse_runtime_args,)
-from twitchgamenotify.notifications import process_notifications
+from twitchgamenotify.notifications import (
+    process_notifications_wrapper,
+    send_connection_error_notification,)
 from twitchgamenotify.twitch_api import (
     TwitchApi,)
 from twitchgamenotify.version import NAME
@@ -64,10 +69,28 @@ def main():
         # Start the indicator in its own thread
         threading.Thread(target=indicator.start, daemon=True).start()
 
-    # Connect to the API
-    twitch_api = TwitchApi(
-        client_id=config_dict['twitch-api-client-id'],
-        client_secret=config_dict['twitch-api-client-secret'],)
+    # Connect to the API - keep retrying and be loud if there's a
+    # connection error
+    while True:
+        try:
+            twitch_api = TwitchApi(
+                client_id=config_dict['twitch-api-client-id'],
+                client_secret=config_dict['twitch-api-client-secret'],)
+
+            # Successful connection
+            break
+        except requests.exceptions.ConnectionError:
+            # Internet is probably down. Log an error and notify if we're
+            # notifying
+            send_connection_error_notification(
+                send_dbus_notification=not cli_args.print_to_terminal)
+
+            logging.info(
+                "Retrying in %s seconds",
+                STARTING_CONNECTION_FAILURE_RETRY_TIME,)
+
+            # Wait a bit before retrying
+            time.sleep(STARTING_CONNECTION_FAILURE_RETRY_TIME)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(
@@ -88,14 +111,14 @@ def main():
 
     # Query (and possibly notify) only once or periodically
     if cli_args.one_shot:
-        process_notifications(**kwargs)
+        process_notifications_wrapper(**kwargs)
     else:
         # Loop until we hit a keyboard interrupt
         try:
             while True:
                 # Process any notifications
                 threading.Thread(
-                    target=process_notifications,
+                    target=process_notifications_wrapper,
                     kwargs=kwargs,).start()
 
                 # Wait before querying again

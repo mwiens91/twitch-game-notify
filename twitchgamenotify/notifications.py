@@ -4,6 +4,7 @@ import datetime
 import logging
 import time
 import notify2
+import requests
 from twitchgamenotify.twitch_api import FailedHttpRequest
 from twitchgamenotify.version import NAME
 
@@ -14,7 +15,7 @@ ANSI_END = '\033[0m'
 
 
 def print_notification_to_terminal(streamer_name, stream_title, game_name):
-    """Print a notification to the terminal.
+    """Print a game notification to the terminal.
 
     Args:
         streamer_name: A string containing the name of the streamer.
@@ -28,7 +29,7 @@ def print_notification_to_terminal(streamer_name, stream_title, game_name):
 
 
 def send_notification_to_dbus(streamer_name, stream_title, game_name):
-    """Send a notification to D-Bus.
+    """Send a game notification to D-Bus.
 
     Args:
         streamer_name: A string containing the name of the streamer.
@@ -136,21 +137,26 @@ def process_notifications(
         # Gather info about the stream. Lookup info in the cache first
         # if it's available.
         if names_cache is not None:
+            # Try getting the display name from the cache
             try:
                 streamer_display_name = (
                     names_cache['streamers'][streamer_login_name])
             except KeyError:
+                # Fetch it
                 streamer_display_name = (
                     twitch_api.get_streamer_display_name(streamer_login_name))
                 names_cache['streamers'][streamer_login_name] = (
                     streamer_display_name)
 
+            # Try getting the game title from the cache
             try:
                 game_title = names_cache['games'][game_id]
             except KeyError:
+                # Fetch it
                 game_title = twitch_api.get_game_title(game_id)
                 names_cache['games'][game_id] = game_title
         else:
+            # No cache. Fetch everything
             streamer_display_name = (
                 twitch_api.get_streamer_display_name(streamer_login_name))
             game_title = twitch_api.get_game_title(game_id)
@@ -169,3 +175,43 @@ def process_notifications(
                 streamer_display_name,
                 stream_title,
                 game_title,)
+
+
+def process_notifications_wrapper(*args, **kwargs):
+    """A wrapper for process_notifications to catch connection errors.
+
+    This makes the code a bit cleaner than inserting lots of try/except
+    blocks into the process_notifications function.
+    """
+    # Determine whether to print to the terminal
+    try:
+        display_dbus_notification = not kwargs['print_to_terminal']
+    except KeyError:
+        # In accordance with print_to_terminal defaulting to False
+        display_dbus_notification = True
+
+    # Try calling process_notifications
+    try:
+        process_notifications(*args, **kwargs)
+    except requests.exceptions.ConnectionError:
+        # Bad connection - stop this iteration
+        send_connection_error_notification(
+            send_dbus_notification=display_dbus_notification)
+
+
+def send_connection_error_notification(send_dbus_notification):
+    """Logs and notifies about a connection failure.
+
+    Arg:
+        send_dbus_notification: A boolean specifying whether to send a
+            notification to D-Bus.
+    """
+    error_message = "Unable to connect to Twitch. Is your internet okay?"
+
+    logging.error(error_message)
+
+    if send_dbus_notification:
+        notify2.Notification(
+            NAME + " @ " + time.strftime('%H:%M'),
+            error_message,
+            ).show()

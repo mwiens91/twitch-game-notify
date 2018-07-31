@@ -57,3 +57,6 @@ TWITCH_TOKEN_API_URL = 'https://id.twitch.tv/oauth2/token'
 # HTTP status codes
 HTTP_200_OK = 200
 HTTP_401_UNAUTHORIZED = 401
+
+# How many seconds to wait when initially no connection
+STARTING_CONNECTION_FAILURE_RETRY_TIME = 10
