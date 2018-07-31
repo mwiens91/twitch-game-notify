@@ -26,40 +26,49 @@ class FailedHttpRequest(Exception):
 
 class TwitchApi:
     """Interacts with the Twitch API."""
-    def __init__(self, client_id):
+    def __init__(self, client_id, client_secret):
         """Set up authorization."""
         self.client_id = client_id
+        self.client_secret = client_secret
         self.session = requests.Session()
         self.session.headers.update({'Client-ID': self.client_id})
 
-    @staticmethod
-    def check_http_status_code(status_code, http_request_url):
-        """Checks that an HTTP status code is okay.
+    def make_http_request(self, http_request_url):
+        """Makes an HTTP request.
 
-        If it's not okay, it'll issue an error message to the logger
-        specifying why and also raise a FailedHttpRequest exception.
+        This assumes that all incoming HTTP requests are GETs, which
+        will be true for everything passed to this function within the
+        scope of this program.
 
         Args:
-            status_code: An integer specifying the status code of a
-                completed HTTP request.
-            http_request_url: A string containing the URL that was used
-                to make the completed HTTP request.
+            http_request_url: A string containing the URL to make an
+                HTTP request to, from the base of the Twitch API.
+
+        Returns:
+            A requests.models.Response object containing the response to
+            the successful HTTP request.
+
         Raises:
             FailedHttpRequest: The status code indicated the HTTP
                 request was not successful.
         """
+        # Make the request
+        response = self.session.get(TWITCH_BASE_API_URL + http_request_url)
+
         try:
             # Make the the HTTP request was okay
-            assert status_code == HTTP_200_OK
+            assert response.status_code == HTTP_200_OK
         except AssertionError:
             # The HTTP request wasn't okay
             message = (
                 "An HTTP request to %s failed with status code %s" %
-                (http_request_url, status_code,))
+                (http_request_url, response.status_code,))
 
             raise FailedHttpRequest(
                 message=message,
-                http_status_code=status_code,)
+                http_status_code=response.status_code,)
+
+        return response
 
     def get_online_stream_info(self, streamer_login_name):
         """Requests info about an online stream.
@@ -82,18 +91,14 @@ class TwitchApi:
                 request was not successful.
         """
         # Make a request to the Twitch API
-        r = self.session.get(
-            TWITCH_BASE_API_URL
-            + '/streams?user_login='
+        response = self.make_http_request(
+            '/streams?user_login='
             + streamer_login_name)
 
-        # Verify that the HTTP method was okay
-        self.check_http_status_code(r.status_code, r.url)
-
         # Build up the info of this stream
-        r_data = r.json()['data']
+        response_data = response.json()['data']
 
-        if not r_data:
+        if not response_data:
             # Stream is offline
             stream_info = dict(
                 live=False,
@@ -102,8 +107,8 @@ class TwitchApi:
         else:
             stream_info = dict(
                 live=True,
-                title=r_data[0]['title'],
-                game_id=r_data[0]['game_id'],)
+                title=response_data[0]['title'],
+                game_id=response_data[0]['game_id'],)
 
         return stream_info
 
@@ -122,16 +127,12 @@ class TwitchApi:
                 request was not successful.
         """
         # Make a request to the Twitch API
-        r = self.session.get(
-            TWITCH_BASE_API_URL
-            + '/users?login='
+        response = self.make_http_request(
+            '/users?login='
             + streamer_login_name)
 
-        # Verify that the HTTP method was okay
-        self.check_http_status_code(r.status_code, r.url)
-
         # Return the display name
-        return r.json()['data'][0]['display_name']
+        return response.json()['data'][0]['display_name']
 
     def get_game_title(self, game_id):
         """Get a game's title given its ID.
@@ -147,13 +148,7 @@ class TwitchApi:
                 request was not successful.
         """
         # Make a request to the Twitch API
-        r = self.session.get(
-            TWITCH_BASE_API_URL
-            + '/games?id='
-            + game_id)
-
-        # Verify that the HTTP method was okay
-        self.check_http_status_code(r.status_code, r.url)
+        response = self.make_http_request('/games?id=' + game_id)
 
         # Return the game title
-        return r.json()['data'][0]['name']
+        return response.json()['data'][0]['name']
