@@ -1,15 +1,17 @@
 """Provides a class to interact with a subset of the Twitch API.
 
 Specifically, the "new Twitch API", which they haven't put a version on
-yet. Right now this uses the Client-ID header, which is fine for a
-relatively small number of requests. JWT support can be developed at
-some point to allow for a higher volume of requests.
+yet.
 """
 
 import requests
 from twitchgamenotify.constants import (
     HTTP_200_OK,
-    TWITCH_BASE_API_URL,)
+    HTTP_401_UNAUTHORIZED,
+    TWITCH_GAME_API_URL,
+    TWITCH_STREAM_API_URL,
+    TWITCH_TOKEN_API_URL,
+    TWITCH_USER_API_URL,)
 
 
 class FailedHttpRequest(Exception):
@@ -28,10 +30,44 @@ class TwitchApi:
     """Interacts with the Twitch API."""
     def __init__(self, client_id, client_secret):
         """Set up authorization."""
+        # Load in authentication details
         self.client_id = client_id
         self.client_secret = client_secret
+
+        # Start a requests session
         self.session = requests.Session()
-        self.session.headers.update({'Client-ID': self.client_id})
+
+        # Get and set an access token
+        self.obtain_access_token()
+
+    def obtain_access_token(self):
+        """Obtains and sets a fresh access token."""
+        # Get the access token
+        response = requests.post(
+            TWITCH_TOKEN_API_URL
+            + '?client_id='
+            + self.client_id
+            + '&client_secret='
+            + self.client_secret
+            + '&grant_type=client_credentials')
+
+        try:
+            # Make the the HTTP request was okay
+            assert response.status_code == HTTP_200_OK
+        except AssertionError:
+            # The HTTP request wasn't okay
+            message = (
+                "An access token fetch failed with status code %s" %
+                response.status_code)
+
+            raise FailedHttpRequest(
+                message=message,
+                http_status_code=response.status_code,)
+
+        # Set the access token
+        access_token = response.json()['access_token']
+        self.session.headers.update(
+            {'Authorization': 'Bearer ' + access_token})
 
     def make_http_request(self, http_request_url):
         """Makes an HTTP request.
@@ -40,9 +76,11 @@ class TwitchApi:
         will be true for everything passed to this function within the
         scope of this program.
 
+        If an access token is expired, another one is obtained.
+
         Args:
             http_request_url: A string containing the URL to make an
-                HTTP request to, from the base of the Twitch API.
+                HTTP request to.
 
         Returns:
             A requests.models.Response object containing the response to
@@ -53,7 +91,16 @@ class TwitchApi:
                 request was not successful.
         """
         # Make the request
-        response = self.session.get(TWITCH_BASE_API_URL + http_request_url)
+        response = self.session.get(http_request_url)
+
+        # If our access token has expired, get another one and retry the
+        # request
+        if response.status_code == HTTP_401_UNAUTHORIZED:
+            # Get a new access token
+            self.obtain_access_token()
+
+            # Repeat the request
+            response = self.session.get(http_request_url)
 
         try:
             # Make the the HTTP request was okay
@@ -92,7 +139,8 @@ class TwitchApi:
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
-            '/streams?user_login='
+            TWITCH_STREAM_API_URL
+            + '?user_login='
             + streamer_login_name)
 
         # Build up the info of this stream
@@ -128,7 +176,8 @@ class TwitchApi:
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
-            '/users?login='
+            TWITCH_USER_API_URL
+            + '?login='
             + streamer_login_name)
 
         # Return the display name
@@ -148,7 +197,10 @@ class TwitchApi:
                 request was not successful.
         """
         # Make a request to the Twitch API
-        response = self.make_http_request('/games?id=' + game_id)
+        response = self.make_http_request(
+            TWITCH_GAME_API_URL
+            + '?id='
+            + game_id)
 
         # Return the game title
         return response.json()['data'][0]['name']

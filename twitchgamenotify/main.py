@@ -64,8 +64,8 @@ def main():
 
     # Connect to the API
     twitch_api = TwitchApi(
-        client_id = config_dict['twitch-api-client-id'],
-        client_secret = config_dict['twitch-api-client-secret'],)
+        client_id=config_dict['twitch-api-client-id'],
+        client_secret=config_dict['twitch-api-client-secret'],)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(

@@ -47,8 +47,13 @@ LOGLEVEL_DICT = {CRITICAL: logging.CRITICAL,
                  INFO: logging.INFO,
                  DEBUG: logging.DEBUG,}
 
-# Twitch base API URL
+# Twitch API URLs
 TWITCH_BASE_API_URL = 'https://api.twitch.tv/helix'
+TWITCH_STREAM_API_URL = TWITCH_BASE_API_URL + '/streams'
+TWITCH_USER_API_URL = TWITCH_BASE_API_URL + '/users'
+TWITCH_GAME_API_URL = TWITCH_BASE_API_URL + '/games'
+TWITCH_TOKEN_API_URL = 'https://id.twitch.tv/oauth2/token'
 
 # HTTP status codes
 HTTP_200_OK = 200
+HTTP_401_UNAUTHORIZED = 401

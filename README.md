@@ -190,11 +190,12 @@ twitch-game-notify --help
 
 ## Rate limits
 
-Using a Twitch API client ID allows for 30 API queries per minute. When
-you first start up twitch-game-notify, you're going to be using up to 3
-API queries per streamer you've specified. When you've been running
+The Twitch API allows for 120 API queries per minute. When you first
+start up twitch-game-notify, you're going to be using up to 3 API
+queries per streamer you've specified. When you've been running
 twitch-game-notify for awhile, most of the static API data will be
 cached and you're going be using ~1 API query per streamer.
 
 As a rough estimate, if you have `N` streamers on your list, you're
-going to want to have a `query-period` of a little above `2*N` seconds.
+going to want to have a `query-period` of a little above `N / 2`
+seconds.
