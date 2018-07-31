@@ -7,7 +7,9 @@ some point to allow for a higher volume of requests.
 """
 
 import requests
-from twitchgamenotify.constants import TWITCH_BASE_API_URL
+from twitchgamenotify.constants import (
+    HTTP_200_OK
+    TWITCH_BASE_API_URL,)
 
 
 class FailedHttpRequest(Exception):
@@ -48,7 +50,7 @@ class TwitchApi:
         """
         try:
             # Make the the HTTP request was okay
-            assert status_code == 200
+            assert status_code == HTTP_200_OK
         except AssertionError:
             # The HTTP request wasn't okay
             message = (
