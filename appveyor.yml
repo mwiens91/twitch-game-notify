@@ -23,6 +23,7 @@ install:
 
   # Inject Twitch Client ID into config
   - sed -i 's@p0gch4mp101fy451do9uod1s1x9i4a@'"$TWITCH_API_CLIENT_ID"'@' config.yaml.example
+  - sed -i 's@itqb0thqi5cek18ae6ekm7pbqvh63k@'"$TWITCH_API_CLIENT_SECRET"'@' config.yaml.example
 
   # Set up config files for running from source and with PyPI install
   - cp config.yaml.example config.yaml
