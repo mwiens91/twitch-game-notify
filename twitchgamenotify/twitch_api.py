@@ -1,7 +1,7 @@
 """Provides a class to interact with a subset of the Twitch API.
 
-Specifically, the "new Twitch API", which they haven't put a version on
-yet.
+Specifically, the "new Twitch API", which they haven't put a version
+number on yet.
 """
 
 import requests
