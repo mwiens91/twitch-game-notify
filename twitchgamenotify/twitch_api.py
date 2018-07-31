@@ -8,7 +8,7 @@ some point to allow for a higher volume of requests.
 
 import requests
 from twitchgamenotify.constants import (
-    HTTP_200_OK
+    HTTP_200_OK,
     TWITCH_BASE_API_URL,)
 
 
