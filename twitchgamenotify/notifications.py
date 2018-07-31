@@ -42,6 +42,25 @@ def send_notification_to_dbus(streamer_name, stream_title, game_name):
         ).show()
 
 
+def send_error_notification(error_message, send_dbus_notification):
+    """Logs and notifies an error message.
+
+    Args:
+        error_message: A string containing the error message
+        send_dbus_notification: A boolean specifying whether to send a
+            notification to D-Bus.
+    """
+    # Log the error
+    logging.error(error_message)
+
+    # Send a notification about the error, if instructed to
+    if send_dbus_notification:
+        notify2.Notification(
+            NAME + " @ " + time.strftime('%H:%M'),
+            error_message,
+            ).show()
+
+
 def process_notifications(
         streamers,
         twitch_api,
@@ -88,14 +107,7 @@ def process_notifications(
         except FailedHttpRequest as e:
             # Bad HTTP request! Log the error and move onto the next
             # streamer!
-            logging.error(e.message)
-
-            if not print_to_terminal:
-                # Send a notification about the error, too
-                notify2.Notification(
-                    NAME + " @ " + time.strftime('%H:%M'),
-                    e.message,
-                    ).show()
+            send_error_notification(e.message, not print_to_terminal)
 
             continue
 
@@ -143,8 +155,18 @@ def process_notifications(
                     names_cache['streamers'][streamer_login_name])
             except KeyError:
                 # Fetch it
-                streamer_display_name = (
-                    twitch_api.get_streamer_display_name(streamer_login_name))
+                try:
+                    streamer_display_name = (
+                        twitch_api.get_streamer_display_name(
+                            streamer_login_name))
+                except FailedHttpRequest as e:
+                    # Bad HTTP request! Log the error and move onto the next
+                    # streamer!
+                    send_error_notification(e.message, not print_to_terminal)
+
+                    continue
+
+                # Store it
                 names_cache['streamers'][streamer_login_name] = (
                     streamer_display_name)
 
@@ -153,13 +175,29 @@ def process_notifications(
                 game_title = names_cache['games'][game_id]
             except KeyError:
                 # Fetch it
-                game_title = twitch_api.get_game_title(game_id)
+                try:
+                    game_title = twitch_api.get_game_title(game_id)
+                except FailedHttpRequest as e:
+                    # Bad HTTP request! Log the error and move onto the next
+                    # streamer!
+                    send_error_notification(e.message, not print_to_terminal)
+
+                    continue
+
+                # Store it
                 names_cache['games'][game_id] = game_title
         else:
-            # No cache. Fetch everything
-            streamer_display_name = (
-                twitch_api.get_streamer_display_name(streamer_login_name))
-            game_title = twitch_api.get_game_title(game_id)
+            # Not using cache. Fetch everything.
+            try:
+                streamer_display_name = (
+                    twitch_api.get_streamer_display_name(streamer_login_name))
+                game_title = twitch_api.get_game_title(game_id)
+            except FailedHttpRequest as e:
+                # Bad HTTP request! Log the error and move onto the next
+                # streamer!
+                send_error_notification(e.message, not print_to_terminal)
+
+                continue
 
         # Title is never cached
         stream_title = info['title']
@@ -175,6 +213,20 @@ def process_notifications(
                 streamer_display_name,
                 stream_title,
                 game_title,)
+
+
+def send_connection_error_notification(send_dbus_notification):
+    """Logs and notifies about a connection failure.
+
+    Arg:
+        send_dbus_notification: A boolean specifying whether to send a
+            notification to D-Bus.
+    """
+    # The message to show
+    error_message = "Unable to connect to Twitch. Is your internet okay?"
+
+    # Show the message
+    send_error_notification(error_message, send_dbus_notification)
 
 
 def process_notifications_wrapper(*args, **kwargs):
@@ -197,21 +249,3 @@ def process_notifications_wrapper(*args, **kwargs):
         # Bad connection - stop this iteration
         send_connection_error_notification(
             send_dbus_notification=display_dbus_notification)
-
-
-def send_connection_error_notification(send_dbus_notification):
-    """Logs and notifies about a connection failure.
-
-    Arg:
-        send_dbus_notification: A boolean specifying whether to send a
-            notification to D-Bus.
-    """
-    error_message = "Unable to connect to Twitch. Is your internet okay?"
-
-    logging.error(error_message)
-
-    if send_dbus_notification:
-        notify2.Notification(
-            NAME + " @ " + time.strftime('%H:%M'),
-            error_message,
-            ).show()
