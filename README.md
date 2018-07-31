@@ -51,6 +51,7 @@ Configuration files look like the following:
 ```yaml
 query-period: 5
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
+twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 streamers:
   "macie_jay":     # Macie_Jay
     include:
@@ -64,9 +65,9 @@ streamers:
 
 There's a `query-period`, which specifies how often the main loop
 happens for querying the streamers you've specified (in seconds).
-There's a `twitch-api-client-id`, which we'll get to in a second. Then
-there's a list of streamers, which for each you specify what games you
-want to be notified about.
+There's a `twitch-api-client-id` and `twitch-api-client-secret`, which
+we'll get to in a second. Then there's a list of streamers, which for
+each you specify what games you want to be notified about.
 
 ### Setting up a configuration file
 
@@ -91,15 +92,13 @@ twitch-game-notify --print-config > $DEST/config.yaml
 which downloads the example configuration file from GitHub and prints it
 to the terminal, which you can then redirect to a file.
 
-### Getting a Twitch API client ID
+### Getting a Twitch API client ID and client secret
 
-To get a Twitch client ID, you need to either create or link an existing
-Twitch account with [Twitch's dev portal](https://dev.twitch.tv/). Up to
-date instructions for obtaining a client ID can be found at
+To get a Twitch client ID and client secret, you need to either create
+or link an existing Twitch account with [Twitch's dev
+portal](https://dev.twitch.tv/). Up to date instructions for obtaining a
+client ID and client secret can be found at
 [dev.twitch.tv/docs/authentication](https://dev.twitch.tv/docs/authentication/).
-
-When registering for a client ID, don't set a client secret; just make
-sure you don't share your client ID (i.e., keep it private).
 
 ### Constructing the streamers list
 

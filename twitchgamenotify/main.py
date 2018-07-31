@@ -63,7 +63,9 @@ def main():
         threading.Thread(target=indicator.start, daemon=True).start()
 
     # Connect to the API
-    twitch_api = TwitchApi(config_dict['twitch-api-client-id'])
+    twitch_api = TwitchApi(
+        client_id = config_dict['twitch-api-client-id'],
+        client_secret = config_dict['twitch-api-client-secret'],)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(
