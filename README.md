@@ -1,6 +1,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/1qrsle0yooilklav?svg=true)](https://ci.appveyor.com/project/mwiens91/twitch-game-notify)
 [![codecov](https://codecov.io/gh/mwiens91/twitch-game-notify/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/twitch-game-notify)
 [![PyPI](https://img.shields.io/pypi/v/twitch-game-notify.svg)](https://pypi.org/project/twitch-game-notify/)
+![Python version](https://img.shields.io/badge/python-3-blue.svg)
 
 # twitch-game-notify
 
