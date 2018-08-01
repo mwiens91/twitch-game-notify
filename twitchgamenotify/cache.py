@@ -1,18 +1,47 @@
-"""Functions for caching static API data."""
+"""Functions for caching static API data.
+
+For all of these functions, the cache is located at
+$XDG_CONFIG_HOME/twitch-game-notify/cache.json, where XDG_CONFIG_HOME
+defaults to $HOME/.config.
+"""
 
 import json
 import os
 from twitchgamenotify.constants import (
+    CACHE_FILE_LOCK_NAME,
     CACHE_FILE_NAME,
     PROJECT_CONFIG_HOME,)
 
 
+def is_cache_locked():
+    """Determines whether a cache is locked.
+
+    Returns:
+        A boolean signalling whether the cache is locked.
+    """
+    # Build the path to the cache lock
+    cache_lock_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_LOCK_NAME)
+
+    return os.path.exists(cache_lock_path)
+
+def lock_cache():
+    """Creates a cache lock file."""
+    # Build the path to the cache lock
+    cache_lock_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_LOCK_NAME)
+
+    # Create an empty lock file
+    open(cache_lock_path, 'x')
+
+def unlock_cache():
+    """Removes a cache lock file."""
+    # Build the path to the cache lock
+    cache_lock_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_LOCK_NAME)
+
+    # Remove the lock
+    os.remove(cache_lock_path)
+
 def load_cache():
     """Loads a cache, or creates one if it doesn't exit.
-
-    The cache is located at
-    $XDG_CONFIG_HOME/twitch-game-notify/cache.json (XDG_CONFIG_HOME
-    defaults to $HOME/.config).
 
     Returns:
         A dictionary containing static API data. For example:
@@ -31,10 +60,6 @@ def load_cache():
 
 def save_cache(cache_dictionary):
     """Saves a cache as JSON.
-
-    The cache is located at
-    $XDG_CONFIG_HOME/twitch-game-notify/cache.json (XDG_CONFIG_HOME
-    defaults to $HOME/.config).
 
     Arg:
         cache_dictionary: A dictionary containing cache information to

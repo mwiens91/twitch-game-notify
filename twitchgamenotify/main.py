@@ -8,7 +8,10 @@ import sys
 import notify2
 import requests
 from twitchgamenotify.cache import (
+    is_cache_locked,
     load_cache,
+    lock_cache,
+    unlock_cache,
     save_cache,)
 from twitchgamenotify.constants import (
     STARTING_CONNECTION_FAILURE_RETRY_TIME,)
@@ -39,8 +42,19 @@ def main():
         # Load the cache
         cache_dict = load_cache()
 
-        # Create a hook to save the cache when exiting the program
-        atexit.register(save_cache, cache_dict)
+        if is_cache_locked():
+            # Another process has claimed the cache
+            logging.warning(
+                "Cache file is locked. All static API data "
+                "collected during this run will be discarded.")
+        else:
+            # Claim ownership of the cache
+            lock_cache()
+
+            # Create a hook to save and unlock the cache when exiting
+            # the program
+            atexit.register(unlock_cache)
+            atexit.register(save_cache, cache_dict)
 
     # Read config file
     try:

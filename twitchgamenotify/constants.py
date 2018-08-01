@@ -28,6 +28,7 @@ except KeyError:
 # Config file names
 CONFIG_FILE_NAME = 'config.yaml'
 CACHE_FILE_NAME = 'cache.json'
+CACHE_FILE_LOCK_NAME = CACHE_FILE_NAME + '.lock'
 
 # URL for example config file on Github
 EXAMPLE_CONFIG_FILE_URL = (
