@@ -4,8 +4,8 @@ Thanks to Timur Rubeko with his wonderful guide here:
 https://candidtim.github.io/appindicator/2014/09/13/ubuntu-appindicator-step-by-step.html.
 """
 
+import _thread
 import logging
-import os
 import gi
 from twitchgamenotify.constants import APP_INDICATOR_SVG_PATH
 from twitchgamenotify.version import NAME
@@ -16,7 +16,7 @@ try:
     gi.require_version('AppIndicator3', '0.1')
 except ValueError as e:
     logging.error(e)
-    os._exit(1)
+    _thread.interrupt_main()
 
 from gi.repository import Gtk, AppIndicator3
 
@@ -37,7 +37,7 @@ class AppIndicator():
         item_quit = Gtk.MenuItem('Quit')
 
         # Wrap the kill_main function
-        quit_wrapper = lambda source: kill_main(0)
+        quit_wrapper = lambda source: _thread.interrupt_main()
 
         item_quit.connect('activate', quit_wrapper)
         menu.append(item_quit)
@@ -54,10 +54,3 @@ class AppIndicator():
     def stop():
         """Stops the Gtk main loop (and hence the indicator)."""
         Gtk.main_quit()
-
-def kill_main(exit_code):
-    """Kills the main loop gracefully from within a thread.
-    See
-    https://stackoverflow.com/questions/1489669/how-to-exit-the-entire-application-from-a-python-thread.
-    """
-    os._exit(exit_code)
