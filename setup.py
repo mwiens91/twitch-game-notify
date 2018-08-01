@@ -31,6 +31,7 @@ setup(
     entry_points={
         'console_scripts': ['twitch-game-notify = twitchgamenotify.main:main'],
     },
+    python_requires='>=3',
     install_requires=[
         'dbus-python',
         'notify2',
