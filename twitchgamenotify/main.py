@@ -119,7 +119,8 @@ def main():
                 # Process any notifications
                 threading.Thread(
                     target=process_notifications_wrapper,
-                    kwargs=kwargs,).start()
+                    kwargs=kwargs,
+                    daemon=True).start()
 
                 # Wait before querying again
                 time.sleep(config_dict['query-period'])
