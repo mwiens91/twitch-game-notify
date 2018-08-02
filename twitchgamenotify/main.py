@@ -105,6 +105,10 @@ def main():
 
             # Wait a bit before retrying
             time.sleep(STARTING_CONNECTION_FAILURE_RETRY_TIME)
+        except KeyboardInterrupt:
+            # Exit gracefully from the program
+            logging.info("Exitting %s", NAME)
+            sys.exit(0)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(
@@ -140,3 +144,4 @@ def main():
                 time.sleep(config_dict['query-period'])
         except KeyboardInterrupt:
             logging.info("Exitting %s", NAME)
+            sys.exit(0)
