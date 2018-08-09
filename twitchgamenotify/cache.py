@@ -45,6 +45,11 @@ def load_cache():
 
     Returns:
         A dictionary containing static API data. For example:
+
+        {"games": {"460630": "Tom Clancy's Rainbow Six: Siege",
+                   "493057": "PLAYERUNKNOWN'S BATTLEGROUNDS"},
+         "streamers": {"macie_jay": "Macie_Jay",
+                       "shroud": "shroud"}}
     """
     # Build the path to the cache JSON file
     cache_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_NAME)
