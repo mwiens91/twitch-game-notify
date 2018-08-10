@@ -71,7 +71,7 @@ def main():
     if (not cli_args.one_shot
             or not cli_args.print_to_terminal
             or cli_args.no_app_indicator):
-        # Import this here to GTK-incompatible machines are still
+        # Import this here so GTK-incompatible machines are still
         # supported
         from twitchgamenotify.app_indicator import AppIndicator
 
