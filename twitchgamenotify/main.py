@@ -4,6 +4,7 @@ import atexit
 import logging
 import time
 import threading
+import signal
 import sys
 import notify2
 import requests
@@ -27,6 +28,12 @@ from twitchgamenotify.twitch_api import (
 from twitchgamenotify.version import NAME
 
 
+def graceful_exit(*_, **__):
+    """Exit such that atexit gets triggered."""
+    logging.info("Exitting %s", NAME)
+    sys.exit(0)
+
+
 def main():
     """The main function."""
     # Get runtime arguments
@@ -36,6 +43,11 @@ def main():
     logging.basicConfig(
         format='%(levelname)s: %(message)s',
         level=cli_args.loglevel,)
+
+    # Make sure process kills and poweroffs cause atexit registers to
+    # trigger
+    signal.signal(signal.SIGTERM, graceful_exit)
+    signal.signal(signal.SIGINT, graceful_exit)
 
     # Load cached static API data
     if not cli_args.no_caching:
@@ -105,10 +117,6 @@ def main():
 
             # Wait a bit before retrying
             time.sleep(STARTING_CONNECTION_FAILURE_RETRY_TIME)
-        except KeyboardInterrupt:
-            # Exit gracefully from the program
-            logging.info("Exitting %s", NAME)
-            sys.exit(0)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(
@@ -131,17 +139,13 @@ def main():
     if cli_args.one_shot:
         process_notifications_wrapper(**kwargs)
     else:
-        # Loop until we hit a keyboard interrupt
-        try:
-            while True:
-                # Process any notifications
-                threading.Thread(
-                    target=process_notifications_wrapper,
-                    kwargs=kwargs,
-                    daemon=True).start()
+        # Loop until we get interrupted
+        while True:
+            # Process any notifications
+            threading.Thread(
+                target=process_notifications_wrapper,
+                kwargs=kwargs,
+                daemon=True).start()
 
-                # Wait before querying again
-                time.sleep(config_dict['query-period'])
-        except KeyboardInterrupt:
-            logging.info("Exitting %s", NAME)
-            sys.exit(0)
+            # Wait before querying again
+            time.sleep(config_dict['query-period'])
