@@ -5,6 +5,7 @@ import os.path
 import sys
 import requests
 import yaml
+from twitchgamenotify.cache import unlock_cache
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
     EXAMPLE_CONFIG_FILE_URL,
@@ -21,13 +22,6 @@ class ConfigFileNotFound(Exception):
     pass
 
 
-class TranslateLogLevelAction(argparse.Action):
-    """argparse action to translate loglevel to a number."""
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Set a logging loglevel number."""
-        setattr(namespace, self.dest, LOGLEVEL_DICT[values])
-
-
 class PrintExampleConfigAction(argparse.Action):
     """argparse action to print example config file."""
     def __call__(self, parser, namespace, values, option_string=None):
@@ -42,6 +36,20 @@ class PrintExampleConfigAction(argparse.Action):
         else:
             print(r.content.decode())
             sys.exit(0)
+
+
+class RemoveCacheLockAction(argparse.Action):
+    """argparse action to remove cache lock (should one exist)."""
+    def __call__(self, parser, namespace, values, option_string=None):
+        """Remove the cache lock."""
+        unlock_cache()
+
+
+class TranslateLogLevelAction(argparse.Action):
+    """argparse action to translate loglevel to a number."""
+    def __call__(self, parser, namespace, values, option_string=None):
+        """Set a logging loglevel number."""
+        setattr(namespace, self.dest, LOGLEVEL_DICT[values])
 
 
 def find_config_file():
@@ -127,6 +135,11 @@ def parse_runtime_args():
         '--print-to-terminal',
         action='store_true',
         help="print to terminal (doesn't connect to D-Bus)")
+    parser.add_argument(
+        '--remove-cache-lock',
+        nargs=0,
+        action=RemoveCacheLockAction,
+        help="removes a cache lock if one exists")
     parser.add_argument(
         '--version',
         action='version',
