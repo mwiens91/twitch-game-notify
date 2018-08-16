@@ -43,7 +43,7 @@ class RemoveCacheLockAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         """Remove the cache lock."""
         try:
-            unlock_cache()
+            unlock_cache(catch_failure=False)
         except FileNotFoundError:
             print(
                 "WARNING: No existing cache lock to remove!",

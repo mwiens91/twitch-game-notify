@@ -32,13 +32,25 @@ def lock_cache():
     # Create an empty lock file
     open(cache_lock_path, 'x')
 
-def unlock_cache():
-    """Removes a cache lock file."""
+def unlock_cache(catch_failure=True):
+    """Removes a cache lock file.
+
+    Arg:
+        catch_failure: An optional boolean signalling whether to catch
+            a FileNotFoundError exception occuring when the cache lock
+            to remove doesn't exist.
+    """
     # Build the path to the cache lock
     cache_lock_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_LOCK_NAME)
 
     # Remove the lock
-    os.remove(cache_lock_path)
+    if catch_failure:
+        try:
+            os.remove(cache_lock_path)
+        except FileNotFoundError:
+            pass
+    else:
+        os.remove(cache_lock_path)
 
 def load_cache():
     """Loads a cache, or creates one if it doesn't exit.
