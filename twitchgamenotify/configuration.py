@@ -42,7 +42,15 @@ class RemoveCacheLockAction(argparse.Action):
     """argparse action to remove cache lock (should one exist)."""
     def __call__(self, parser, namespace, values, option_string=None):
         """Remove the cache lock."""
-        unlock_cache()
+        try:
+            unlock_cache()
+        except FileNotFoundError:
+            print(
+                "WARNING: No existing cache lock to remove!",
+                file=sys.stderr,)
+
+        # Get out
+        sys.exit(0)
 
 
 class TranslateLogLevelAction(argparse.Action):
