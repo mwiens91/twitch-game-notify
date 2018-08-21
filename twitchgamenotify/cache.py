@@ -24,6 +24,7 @@ def is_cache_locked():
 
     return os.path.exists(cache_lock_path)
 
+
 def lock_cache():
     """Creates a cache lock file."""
     # Build the path to the cache lock
@@ -31,6 +32,7 @@ def lock_cache():
 
     # Create an empty lock file
     open(cache_lock_path, 'x')
+
 
 def unlock_cache(catch_failure=True):
     """Removes a cache lock file.
@@ -74,6 +76,7 @@ def load_cache():
     # Load the cache file
     with open(cache_path, 'r') as cache_file:
         return json.load(cache_file)
+
 
 def save_cache(cache_dictionary):
     """Saves a cache as JSON.

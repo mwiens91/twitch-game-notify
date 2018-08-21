@@ -4,7 +4,7 @@ Thanks to Timur Rubeko with his wonderful guide here:
 https://candidtim.github.io/appindicator/2014/09/13/ubuntu-appindicator-step-by-step.html.
 """
 
-import _thread
+import _thread  # pylint: disable=wrong-import-order
 import logging
 import gi
 from twitchgamenotify.constants import APP_INDICATOR_SVG_PATH
@@ -18,7 +18,7 @@ except ValueError as e:
     logging.error(e)
     _thread.interrupt_main()
 
-from gi.repository import Gtk, AppIndicator3
+from gi.repository import Gtk, AppIndicator3    # pylint: disable=wrong-import-order,wrong-import-position,ungrouped-imports
 
 
 class AppIndicator():
