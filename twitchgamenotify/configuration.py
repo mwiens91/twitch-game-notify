@@ -91,11 +91,7 @@ def find_config_file():
 
 
 def parse_config_file():
-    """Find and parse a config file.
-
-    Raises:
-        ConfigFileNotFound: A config file couldn't be found.
-    """
+    """Find and parse a config file."""
     # Find the config file first
     config_path = find_config_file()
 
