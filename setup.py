@@ -8,10 +8,18 @@ from twitchgamenotify.version import NAME, DESCRIPTION, VERSION
 with open('README.md') as f:
     long_description = f.read()
 
+def capitalize(s):
+    """Capitalize the first letter of a string.
+
+    Unlike the capitalize string method, this leaves the other
+    characters untouched.
+    """
+    return s[:1].upper() + s[1:]
+
 setup(
     name=NAME,
     version=VERSION,
-    description=DESCRIPTION.capitalize(),
+    description=capitalize(DESCRIPTION),
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/mwiens91/twitch-game-notify',
