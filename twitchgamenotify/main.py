@@ -13,18 +13,19 @@ from twitchgamenotify.cache import (
     load_cache,
     lock_cache,
     unlock_cache,
-    save_cache,)
-from twitchgamenotify.constants import (
-    STARTING_CONNECTION_FAILURE_RETRY_TIME,)
+    save_cache,
+)
+from twitchgamenotify.constants import STARTING_CONNECTION_FAILURE_RETRY_TIME
 from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
-    parse_runtime_args,)
+    parse_runtime_args,
+)
 from twitchgamenotify.notifications import (
     process_notifications_wrapper,
-    send_connection_error_notification,)
-from twitchgamenotify.twitch_api import (
-    TwitchApi,)
+    send_connection_error_notification,
+)
+from twitchgamenotify.twitch_api import TwitchApi
 from twitchgamenotify.version import NAME
 
 
@@ -41,8 +42,8 @@ def main():
 
     # Set up logger
     logging.basicConfig(
-        format='%(levelname)s: %(message)s',
-        level=cli_args.loglevel,)
+        format="%(levelname)s: %(message)s", level=cli_args.loglevel
+    )
 
     # Make sure process kills and poweroffs cause atexit registers to
     # trigger
@@ -58,7 +59,8 @@ def main():
             # Another process has claimed the cache
             logging.warning(
                 "Cache file is locked. All static API data "
-                "collected during this run will be discarded.")
+                "collected during this run will be discarded."
+            )
         else:
             # Claim ownership of the cache
             lock_cache()
@@ -80,9 +82,11 @@ def main():
         notify2.init(NAME)
 
     # Set up app indicator and run it in a separate thread
-    if (not cli_args.one_shot
-            or not cli_args.print_to_terminal
-            or cli_args.no_app_indicator):
+    if (
+        not cli_args.one_shot
+        or not cli_args.print_to_terminal
+        or cli_args.no_app_indicator
+    ):
         # Import this here so GTK-incompatible machines are still
         # supported
         from twitchgamenotify.app_indicator import AppIndicator
@@ -100,8 +104,9 @@ def main():
     while True:
         try:
             twitch_api = TwitchApi(
-                client_id=config_dict['twitch-api-client-id'],
-                client_secret=config_dict['twitch-api-client-secret'],)
+                client_id=config_dict["twitch-api-client-id"],
+                client_secret=config_dict["twitch-api-client-secret"],
+            )
 
             # Successful connection
             break
@@ -109,11 +114,13 @@ def main():
             # Internet is probably down. Log an error and notify if we're
             # notifying
             send_connection_error_notification(
-                send_dbus_notification=not cli_args.print_to_terminal)
+                send_dbus_notification=not cli_args.print_to_terminal
+            )
 
             logging.info(
                 "Retrying in %s seconds",
-                STARTING_CONNECTION_FAILURE_RETRY_TIME,)
+                STARTING_CONNECTION_FAILURE_RETRY_TIME,
+            )
 
             # Wait a bit before retrying
             time.sleep(STARTING_CONNECTION_FAILURE_RETRY_TIME)
@@ -121,19 +128,21 @@ def main():
     # Set up arguments to give process_notifcations
     kwargs = dict(
         print_to_terminal=cli_args.print_to_terminal,
-        streamers=config_dict['streamers'],
-        twitch_api=twitch_api,)
+        streamers=config_dict["streamers"],
+        twitch_api=twitch_api,
+    )
 
     if not cli_args.no_caching:
-        kwargs['names_cache'] = cache_dict
+        kwargs["names_cache"] = cache_dict
 
     if not cli_args.one_shot:
         # Remember what game a streamer was playing last so we don't
         # re-notify
-        streamers_last_seen_playing_dict = (
-            {streamer: "" for streamer in config_dict['streamers'].keys()})
+        streamers_last_seen_playing_dict = {
+            streamer: "" for streamer in config_dict["streamers"].keys()
+        }
 
-        kwargs['streamers_previous_game'] = streamers_last_seen_playing_dict
+        kwargs["streamers_previous_game"] = streamers_last_seen_playing_dict
 
     # Query (and possibly notify) only once or periodically
     if cli_args.one_shot:
@@ -145,7 +154,8 @@ def main():
             threading.Thread(
                 target=process_notifications_wrapper,
                 kwargs=kwargs,
-                daemon=True).start()
+                daemon=True,
+            ).start()
 
             # Wait before querying again
-            time.sleep(config_dict['query-period'])
+            time.sleep(config_dict["query-period"])

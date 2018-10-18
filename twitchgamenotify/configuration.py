@@ -13,17 +13,20 @@ from twitchgamenotify.constants import (
     LOGLEVEL_DICT,
     PROJECT_BASE_DIR,
     PROJECT_CONFIG_HOME,
-    WARNING,)
+    WARNING,
+)
 from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
 
 
 class ConfigFileNotFound(Exception):
     """Raised when a config file can't be found."""
+
     pass
 
 
 class PrintExampleConfigAction(argparse.Action):
     """argparse action to print example config file."""
+
     def __call__(self, parser, namespace, values, option_string=None):
         """Download and print example config file."""
         r = requests.get(EXAMPLE_CONFIG_FILE_URL)
@@ -31,7 +34,8 @@ class PrintExampleConfigAction(argparse.Action):
         if r.status_code != 200:
             print(
                 "ERROR: Failed to download example config file!",
-                file=sys.stderr,)
+                file=sys.stderr,
+            )
             sys.exit(1)
         else:
             print(r.content.decode())
@@ -40,14 +44,15 @@ class PrintExampleConfigAction(argparse.Action):
 
 class RemoveCacheLockAction(argparse.Action):
     """argparse action to remove cache lock (should one exist)."""
+
     def __call__(self, parser, namespace, values, option_string=None):
         """Remove the cache lock."""
         try:
             unlock_cache(catch_failure=False)
         except FileNotFoundError:
             print(
-                "WARNING: No existing cache lock to remove!",
-                file=sys.stderr,)
+                "WARNING: No existing cache lock to remove!", file=sys.stderr
+            )
 
         # Get out
         sys.exit(0)
@@ -55,6 +60,7 @@ class RemoveCacheLockAction(argparse.Action):
 
 class TranslateLogLevelAction(argparse.Action):
     """argparse action to translate loglevel to a number."""
+
     def __call__(self, parser, namespace, values, option_string=None):
         """Set a logging loglevel number."""
         setattr(namespace, self.dest, LOGLEVEL_DICT[values])
@@ -97,7 +103,7 @@ def parse_config_file():
 
     # Now parse and return it - note that PyYAML doesn't come with any
     # schema validation, which might be desirable at some point
-    with open(config_path, 'r') as config_file:
+    with open(config_path, "r") as config_file:
         return yaml.load(config_file)
 
 
@@ -110,43 +116,46 @@ def parse_runtime_args():
         details.
     """
     parser = argparse.ArgumentParser(
-        prog=NAME,
-        description="%(prog)s - " + DESCRIPTION,)
+        prog=NAME, description="%(prog)s - " + DESCRIPTION
+    )
     parser.add_argument(
-        '-l', '--loglevel',
+        "-l",
+        "--loglevel",
         default=LOGLEVEL_DICT[WARNING],
         choices=LOGLEVEL_CHOICES,
         action=TranslateLogLevelAction,
-        help="how much to log",)
+        help="how much to log",
+    )
     parser.add_argument(
-        '--one-shot',
-        action='store_true',
-        help="query once then exit")
+        "--one-shot", action="store_true", help="query once then exit"
+    )
     parser.add_argument(
-        '--no-app-indicator',
-        action='store_true',
-        help="don't launch an app indicator")
+        "--no-app-indicator",
+        action="store_true",
+        help="don't launch an app indicator",
+    )
     parser.add_argument(
-        '--no-caching',
-        action='store_true',
-        help="don't cache static API data")
+        "--no-caching", action="store_true", help="don't cache static API data"
+    )
     parser.add_argument(
-        '--print-config',
+        "--print-config",
         nargs=0,
         action=PrintExampleConfigAction,
-        help="downloads and prints example config file")
+        help="downloads and prints example config file",
+    )
     parser.add_argument(
-        '--print-to-terminal',
-        action='store_true',
-        help="print to terminal (doesn't connect to D-Bus)")
+        "--print-to-terminal",
+        action="store_true",
+        help="print to terminal (doesn't connect to D-Bus)",
+    )
     parser.add_argument(
-        '--remove-cache-lock',
+        "--remove-cache-lock",
         nargs=0,
         action=RemoveCacheLockAction,
-        help="removes a cache lock if one exists")
+        help="removes a cache lock if one exists",
+    )
     parser.add_argument(
-        '--version',
-        action='version',
-        version="%(prog)s " + VERSION)
+        "--version", action="version", version="%(prog)s " + VERSION
+    )
 
     return parser.parse_args()

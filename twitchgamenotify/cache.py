@@ -10,7 +10,8 @@ import os
 from twitchgamenotify.constants import (
     CACHE_FILE_LOCK_NAME,
     CACHE_FILE_NAME,
-    PROJECT_CONFIG_HOME,)
+    PROJECT_CONFIG_HOME,
+)
 
 
 def is_cache_locked():
@@ -31,7 +32,7 @@ def lock_cache():
     cache_lock_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_LOCK_NAME)
 
     # Create an empty lock file
-    open(cache_lock_path, 'x')
+    open(cache_lock_path, "x")
 
 
 def unlock_cache(catch_failure=True):
@@ -54,6 +55,7 @@ def unlock_cache(catch_failure=True):
     else:
         os.remove(cache_lock_path)
 
+
 def load_cache():
     """Loads a cache, or creates one if it doesn't exit.
 
@@ -71,10 +73,10 @@ def load_cache():
     # If a cache doesn't exist, return an empty dictionary as the new
     # cache
     if not os.path.exists(cache_path):
-        return {'games': {}, 'streamers': {}}
+        return {"games": {}, "streamers": {}}
 
     # Load the cache file
-    with open(cache_path, 'r') as cache_file:
+    with open(cache_path, "r") as cache_file:
         return json.load(cache_file)
 
 
@@ -91,5 +93,5 @@ def save_cache(cache_dictionary):
     # Make sure the directory paths to the cache file exist
     os.makedirs(PROJECT_CONFIG_HOME, exist_ok=True)
 
-    with open(cache_path, 'w') as cache_file:
+    with open(cache_path, "w") as cache_file:
         cache_file.write(json.dumps(cache_dictionary))

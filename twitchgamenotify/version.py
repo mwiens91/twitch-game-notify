@@ -1,7 +1,8 @@
 """Contains name, version, description."""
 
-NAME = 'twitch-game-notify'
-VERSION = '0.2.10'
+NAME = "twitch-game-notify"
+VERSION = "0.2.10"
 DESCRIPTION = (
     "get notified when your favourite Twitch streamers "
-    "play your favourite games")
+    "play your favourite games"
+)

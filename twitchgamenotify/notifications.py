@@ -10,8 +10,8 @@ from twitchgamenotify.version import NAME
 
 
 # ANSI escape sequence for bold text
-ANSI_BOLD = '\033[1m'
-ANSI_END = '\033[0m'
+ANSI_BOLD = "\033[1m"
+ANSI_END = "\033[0m"
 
 
 def print_notification_to_terminal(streamer_name, stream_title, game_name):
@@ -22,7 +22,7 @@ def print_notification_to_terminal(streamer_name, stream_title, game_name):
         stream_title: A string containing the title of the stream.
         game_name: A string containing the name of the game.
     """
-    print(ANSI_BOLD + streamer_name + ANSI_END, end='')
+    print(ANSI_BOLD + streamer_name + ANSI_END, end="")
     print(" @ " + datetime.datetime.now().isoformat())
     print("Title: %s" % stream_title)
     print("Playing: %s" % game_name)
@@ -37,9 +37,9 @@ def send_notification_to_dbus(streamer_name, stream_title, game_name):
         game_name: A string containing the name of the game.
     """
     notify2.Notification(
-        streamer_name + " @ " + time.strftime('%H:%M'),
-        "Title: %s\nPlaying: %s" % (stream_title, game_name)
-        ).show()
+        streamer_name + " @ " + time.strftime("%H:%M"),
+        "Title: %s\nPlaying: %s" % (stream_title, game_name),
+    ).show()
 
 
 def send_error_notification(error_message, send_dbus_notification):
@@ -56,17 +56,17 @@ def send_error_notification(error_message, send_dbus_notification):
     # Send a notification about the error, if instructed to
     if send_dbus_notification:
         notify2.Notification(
-            NAME + " @ " + time.strftime('%H:%M'),
-            error_message,
-            ).show()
+            NAME + " @ " + time.strftime("%H:%M"), error_message
+        ).show()
 
 
 def process_notifications(
-        streamers,
-        twitch_api,
-        names_cache=None,
-        streamers_previous_game=None,
-        print_to_terminal=False):
+    streamers,
+    twitch_api,
+    names_cache=None,
+    streamers_previous_game=None,
+    print_to_terminal=False,
+):
     """Query the Twitch API for all streamers and display notications.
 
     Args:
@@ -113,16 +113,18 @@ def process_notifications(
 
         # If the streamer isn't live, record that they aren't playing
         # anything and move onto the next streamer
-        if not info['live']:
+        if not info["live"]:
             # Mark them as last seen playing nothing
-            if (streamers_previous_game
-                    and streamers_previous_game[streamer_login_name]):
+            if (
+                streamers_previous_game
+                and streamers_previous_game[streamer_login_name]
+            ):
                 streamers_previous_game[streamer_login_name] = ""
 
             continue
 
         # Check if this is a game to notify about
-        game_id = info['game_id']
+        game_id = info["game_id"]
 
         # If the streamer was last seen playing this game, move on. If
         # they are playing something new, record it.
@@ -136,13 +138,13 @@ def process_notifications(
             streamers_previous_game[streamer_login_name] = game_id
 
         # Check the include (and possibly exclude) list
-        if "*" in games['include']:
+        if "*" in games["include"]:
             # All games are included. Check if we need to exclude any
             # games.
-            if 'exclude' in games and game_id in games['exclude']:
+            if "exclude" in games and game_id in games["exclude"]:
                 continue
 
-        elif game_id not in games['include']:
+        elif game_id not in games["include"]:
             # Game not in the include list
             continue
 
@@ -151,14 +153,15 @@ def process_notifications(
         if names_cache is not None:
             # Try getting the display name from the cache
             try:
-                streamer_display_name = (
-                    names_cache['streamers'][streamer_login_name])
+                streamer_display_name = names_cache["streamers"][
+                    streamer_login_name
+                ]
             except KeyError:
                 # Fetch it
                 try:
-                    streamer_display_name = (
-                        twitch_api.get_streamer_display_name(
-                            streamer_login_name))
+                    streamer_display_name = twitch_api.get_streamer_display_name(
+                        streamer_login_name
+                    )
                 except FailedHttpRequest as e:
                     # Bad HTTP request! Log the error and move onto the next
                     # streamer!
@@ -167,12 +170,13 @@ def process_notifications(
                     continue
 
                 # Store it
-                names_cache['streamers'][streamer_login_name] = (
-                    streamer_display_name)
+                names_cache["streamers"][
+                    streamer_login_name
+                ] = streamer_display_name
 
             # Try getting the game title from the cache
             try:
-                game_title = names_cache['games'][game_id]
+                game_title = names_cache["games"][game_id]
             except KeyError:
                 # Fetch it
                 try:
@@ -185,12 +189,13 @@ def process_notifications(
                     continue
 
                 # Store it
-                names_cache['games'][game_id] = game_title
+                names_cache["games"][game_id] = game_title
         else:
             # Not using cache. Fetch everything.
             try:
-                streamer_display_name = (
-                    twitch_api.get_streamer_display_name(streamer_login_name))
+                streamer_display_name = twitch_api.get_streamer_display_name(
+                    streamer_login_name
+                )
                 game_title = twitch_api.get_game_title(game_id)
             except FailedHttpRequest as e:
                 # Bad HTTP request! Log the error and move onto the next
@@ -200,19 +205,17 @@ def process_notifications(
                 continue
 
         # Title is never cached
-        stream_title = info['title']
+        stream_title = info["title"]
 
         # Send a notification
         if print_to_terminal:
             print_notification_to_terminal(
-                streamer_display_name,
-                stream_title,
-                game_title,)
+                streamer_display_name, stream_title, game_title
+            )
         else:
             send_notification_to_dbus(
-                streamer_display_name,
-                stream_title,
-                game_title,)
+                streamer_display_name, stream_title, game_title
+            )
 
 
 def send_connection_error_notification(send_dbus_notification):
@@ -237,7 +240,7 @@ def process_notifications_wrapper(*args, **kwargs):
     """
     # Determine whether to print to the terminal
     try:
-        display_dbus_notification = not kwargs['print_to_terminal']
+        display_dbus_notification = not kwargs["print_to_terminal"]
     except KeyError:
         # In accordance with print_to_terminal defaulting to False
         display_dbus_notification = True
@@ -248,4 +251,5 @@ def process_notifications_wrapper(*args, **kwargs):
     except requests.exceptions.ConnectionError:
         # Bad connection - stop this iteration
         send_connection_error_notification(
-            send_dbus_notification=display_dbus_notification)
+            send_dbus_notification=display_dbus_notification
+        )

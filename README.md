@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/mwiens91/twitch-game-notify/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/twitch-game-notify)
 [![PyPI](https://img.shields.io/pypi/v/twitch-game-notify.svg)](https://pypi.org/project/twitch-game-notify/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/twitch-game-notify.svg)](https://pypi.org/project/twitch-game-notify/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 # twitch-game-notify
 

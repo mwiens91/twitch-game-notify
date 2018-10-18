@@ -11,11 +11,13 @@ from twitchgamenotify.constants import (
     TWITCH_GAME_API_URL,
     TWITCH_STREAM_API_URL,
     TWITCH_TOKEN_API_URL,
-    TWITCH_USER_API_URL,)
+    TWITCH_USER_API_URL,
+)
 
 
 class FailedHttpRequest(Exception):
     """An exception raised when an HTTP request failed."""
+
     def __init__(self, message, http_status_code):
         """Record what the HTTP status code for the bad request was."""
         # Call the parent class __init__
@@ -28,6 +30,7 @@ class FailedHttpRequest(Exception):
 
 class TwitchApi:
     """Interacts with the Twitch API."""
+
     def __init__(self, client_id, client_secret):
         """Set up authorization."""
         # Load in authentication details
@@ -45,11 +48,12 @@ class TwitchApi:
         # Get the access token
         response = requests.post(
             TWITCH_TOKEN_API_URL
-            + '?client_id='
+            + "?client_id="
             + self.client_id
-            + '&client_secret='
+            + "&client_secret="
             + self.client_secret
-            + '&grant_type=client_credentials')
+            + "&grant_type=client_credentials"
+        )
 
         try:
             # Make the the HTTP request was okay
@@ -57,17 +61,19 @@ class TwitchApi:
         except AssertionError:
             # The HTTP request wasn't okay
             message = (
-                "An access token fetch failed with status code %s" %
-                response.status_code)
+                "An access token fetch failed with status code %s"
+                % response.status_code
+            )
 
             raise FailedHttpRequest(
-                message=message,
-                http_status_code=response.status_code,)
+                message=message, http_status_code=response.status_code
+            )
 
         # Set the access token
-        access_token = response.json()['access_token']
+        access_token = response.json()["access_token"]
         self.session.headers.update(
-            {'Authorization': 'Bearer ' + access_token})
+            {"Authorization": "Bearer " + access_token}
+        )
 
     def make_http_request(self, http_request_url):
         """Makes an HTTP request.
@@ -107,13 +113,14 @@ class TwitchApi:
             assert response.status_code == HTTP_200_OK
         except AssertionError:
             # The HTTP request wasn't okay
-            message = (
-                "An HTTP request to %s failed with status code %s" %
-                (http_request_url, response.status_code,))
+            message = "An HTTP request to %s failed with status code %s" % (
+                http_request_url,
+                response.status_code,
+            )
 
             raise FailedHttpRequest(
-                message=message,
-                http_status_code=response.status_code,)
+                message=message, http_status_code=response.status_code
+            )
 
         return response
 
@@ -135,24 +142,21 @@ class TwitchApi:
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
-            TWITCH_STREAM_API_URL
-            + '?user_login='
-            + streamer_login_name)
+            TWITCH_STREAM_API_URL + "?user_login=" + streamer_login_name
+        )
 
         # Build up the info of this stream
-        response_data = response.json()['data']
+        response_data = response.json()["data"]
 
         if not response_data:
             # Stream is offline
-            stream_info = dict(
-                live=False,
-                title="",
-                game_id="",)
+            stream_info = dict(live=False, title="", game_id="")
         else:
             stream_info = dict(
                 live=True,
-                title=response_data[0]['title'],
-                game_id=response_data[0]['game_id'],)
+                title=response_data[0]["title"],
+                game_id=response_data[0]["game_id"],
+            )
 
         return stream_info
 
@@ -168,12 +172,11 @@ class TwitchApi:
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
-            TWITCH_USER_API_URL
-            + '?login='
-            + streamer_login_name)
+            TWITCH_USER_API_URL + "?login=" + streamer_login_name
+        )
 
         # Return the display name
-        return response.json()['data'][0]['display_name']
+        return response.json()["data"][0]["display_name"]
 
     def get_game_title(self, game_id):
         """Get a game's title given its ID.
@@ -186,9 +189,8 @@ class TwitchApi:
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
-            TWITCH_GAME_API_URL
-            + '?id='
-            + game_id)
+            TWITCH_GAME_API_URL + "?id=" + game_id
+        )
 
         # Return the game title
-        return response.json()['data'][0]['name']
+        return response.json()["data"][0]["name"]
