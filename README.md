@@ -155,18 +155,16 @@ how). For convenience, a list of popular games' IDs are listed in the
 example configuration file [config.yaml.example](config.yaml.example):
 
 ```yaml
-# ARK: 489635
+# 7 Days to Die: 271304
 # Always On: 499973
 # Arena of Valor: 498302
+# ARK: 489635
+# Art: 509660
+# Artifact: 16937
+# ASMR: 509659
+# Battlefield V: 504199
 # Black Desert Online: 386821
 # Blade and Soul: 20423
-# Borderlands: The Pre-Sequel!: 460041
-# Call of Duty: Black Ops III: 489401
-# Call of Duty: WWII: 496712
-# Casino: 9234
-# Chess: 743
-# Conan Exiles: 493551
-# Counter-Strike: Global Offensive: 32399
 # ...
 ```
 

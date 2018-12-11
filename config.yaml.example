@@ -44,92 +44,137 @@ streamers:
       - "21779"
 
 # For convenience, here are some of the IDs of some popular games on
-# Twitch (grabbed on 2018-07-28):
+# Twitch (updated 2018-12-10):
 
-# ARK: 489635
+# 7 Days to Die: 271304
 # Always On: 499973
 # Arena of Valor: 498302
+# ARK: 489635
+# Art: 509660
+# Artifact: 16937
+# ASMR: 509659
+# Battlefield V: 504199
 # Black Desert Online: 386821
 # Blade and Soul: 20423
+# Bomberman 64: 15910
 # Borderlands: The Pre-Sequel!: 460041
+# Business Tour: 497852
+# Call of Duty: Black Ops 4: 504462
 # Call of Duty: Black Ops III: 489401
 # Call of Duty: WWII: 496712
+# Casino: 509576
 # Casino: 9234
 # Chess: 743
 # Conan Exiles: 493551
 # Counter-Strike: Global Offensive: 32399
 # Creative: 488191
 # Dark Souls III: 490292
+# Dark Souls: 29433
 # Dead by Daylight: 491487
 # Deep Rock Galactic: 494839
 # Destiny 2: 497057
 # Detroit: Become Human: 497480
+# Diablo II: Lord of Destruction: 14304
 # Diablo III: Reaper of Souls: 313558
 # Dig Or Die: 489162
 # Dota 2: 29595
 # Dragon Ball FighterZ: 497385
 # Dungeons & Dragons: 31621
+# Dungeons & Dragons: 509577
 # Enter the Gungeon: 488632
+# Epic Seven: 510056
 # Escape From Tarkov: 491931
-# FIFA 18: 495589
-# FINAL FANTASY XIV Online: 24241
+# Eternal: 491403
 # Fallout 4: 489776
+# Fallout 76: 506246
+# FIFA 18: 495589
+# FIFA 19: 506103
+# FINAL FANTASY XIV Online: 24241
+# Food & Drink: 509667
 # Fortnite: 33214
+# Gears of War 4: 459382
 # Grand Theft Auto V: 32982
+# Halo: The Master Chief Collection: 417969
 # Hatsune Miku: Project DIVA F 2nd: 313132
 # Hearthstone: 138585
 # Heroes of the Storm: 32959
+# Hidden Agenda: 7634
 # House Flipper: 498000
 # inFamous: Second Son: 126292
-# IRL: 494717
 # Islands of Nyne: Battle Royale: 496512
 # Ju-On: The Grudge: 23394
+# Just Cause 4: 506384
+# Just Chatting: 509658
+# Katamari Damacy: 10902
+# Kingdom Hearts HD I.5 + II.5 Remix: 494099
+# Kingdom Two Crowns: 510344
 # League of Legends: 21779
+# Lineage II: 8901
+# Lost Ark Online: 490100
+# Madden NFL 19: 506104
 # Magic: The Gathering: 2748
-# MapleStory: 19976
+# Makers & Crafting: 509673
+# MapleStory 2: 488769
 # MapleStory M: 503829
+# MapleStory: 19976
+# Marbles On Stream: 509511
 # Mega Man X: 8676
 # Minecraft: 27471
 # Miscreated: 383341
 # Monster Hunter World: 497467
+# Music & Performing Arts: 26936
 # Music: 26936
 # NBA 2K18: 495056
+# NBA 2K19: 506383
 # No Man's Sky: 458781
 # Octopath Traveler: 495062
 # Old School RuneScape: 459931
 # osu!: 21465
 # Overwatch: 488552
-# PLAYERUNKNOWN'S BATTLEGROUNDS: 493057
-# PUBG MOBILE: 505884
 # Paladins: 491115
 # Path of Exile: 29307
-# Poker: 488190
+# PlanetSide 2: 26175
+# PLAYERUNKNOWN'S BATTLEGROUNDS: 493057
 # Pokemon Ultra Sun/Ultra Moon: 497334
+# Pokemon: Let's Go, Pikachu!/Eevee!: 506237
+# Poker: 488190
 # Professor Layton vs. Phoenix Wright: Ace Attorney: 29625
+# PUBG MOBILE: 505884
 # Quake Champions: 496253
 # Realm Royale: 505845
+# Red Dead Redemption 2: 493959
 # Rend: 496704
 # Retro: 27284
 # RimWorld: 394568
+# Ring Of Elysium: 504954
 # Rocket League: 30921
 # Romancing SaGa 3: 2425
+# Runner3: 493526
 # Rust: 263490
-# skribbl.io: 496983
+# Science & Technology: 509670
 # Sea of Thieves: 490377
+# Shin Megami Tensei: Nocturne: 15442
+# skribbl.io: 496983
 # Slay the Spire: 496902
 # Smite: 32507
+# Star Citizen: 71375
 # StarCraft II: 490422
 # Street Fighter V: 488615
 # Super Mario 64: 2692
 # Super Mario Maker: 490608
-# Super Smash Bros. Melee: 16282
+# Super Metroid: 7595
 # Super Smash Bros. for Wii U: 488353
+# Super Smash Bros. Melee: 16282
+# Super Smash Bros. Ultimate: 504461
+# Talk Shows & Podcasts: 417752
 # Talk Shows: 417752
 # Team Fortress 2: 16676
+# Tekken 7: 461067
 # Terraria: 31376
 # The Elder Scrolls Online: 65654
 # The Elder Scrolls: Legends: 490349
 # The Forest: 7022
+# The Legend of Zelda: A Link to the Past: 9435
 # The Legend of Zelda: Breath of the Wild: 110758
 # The Legend of Zelda: Majora's Mask: 12482
 # The Legend of Zelda: Ocarina of Time: 11557
@@ -137,11 +182,14 @@ streamers:
 # theHunter: Call of the Wild: 494683
 # Tibia: 19619
 # Tom Clancy's Rainbow Six: Siege: 460630
+# Tom Clancy's The Division: 369579
 # Twitch Plays: 491180
 # VRChat: 499003
 # Warcraft III: The Frozen Throne: 12924
 # Warframe: 66170
+# Welcome to the Game II: 499507
 # World of Tanks: 27546
 # World of Warcraft: 18122
+# World of Warships: 32502
 # Wrestling Revolution: 103837
 # XCOM 2: War of the Chosen: 497435
