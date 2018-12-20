@@ -187,6 +187,10 @@ class TwitchApi:
         Returns:
             A string containing the game's title.
         """
+        # Special case: no game set (Twitch gives this a game ID of 0)
+        if game_id == "0":
+            return ""
+
         # Make a request to the Twitch API
         response = self.make_http_request(
             TWITCH_GAME_API_URL + "?id=" + game_id
