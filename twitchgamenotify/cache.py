@@ -94,4 +94,6 @@ def save_cache(cache_dictionary):
     os.makedirs(PROJECT_CONFIG_HOME, exist_ok=True)
 
     with open(cache_path, "w") as cache_file:
-        cache_file.write(json.dumps(cache_dictionary))
+        cache_file.write(
+            json.dumps(cache_dictionary, indent=2, sort_keys=True)
+        )
