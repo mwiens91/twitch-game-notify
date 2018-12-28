@@ -70,9 +70,10 @@ def load_cache():
     # Build the path to the cache JSON file
     cache_path = os.path.join(PROJECT_CONFIG_HOME, CACHE_FILE_NAME)
 
-    # If a cache doesn't exist, return an empty dictionary as the new
+    # If a cache doesn't exist or if it's an empty file (maybe it got
+    # corrupted at some point?), return an empty dictionary as the new
     # cache
-    if not os.path.exists(cache_path):
+    if not os.path.exists(cache_path) or not os.stat(cache_path).st_size:
         return {"games": {}, "streamers": {}}
 
     # Load the cache file
