@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Runs the twitch-game-notify."""
+"""Runs twitch-game-notify."""
 
 from twitchgamenotify.main import main
 
