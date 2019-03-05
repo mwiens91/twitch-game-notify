@@ -104,7 +104,7 @@ def parse_config_file():
     # Now parse and return it - note that PyYAML doesn't come with any
     # schema validation, which might be desirable at some point
     with open(config_path, "r") as config_file:
-        return yaml.load(config_file)
+        return yaml.safe_load(config_file)
 
 
 def parse_runtime_args():
