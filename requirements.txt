@@ -5,6 +5,6 @@ idna==2.7
 notify2==0.3.1
 pycairo==1.18.0
 PyGObject==3.30.4
-PyYAML==4.2b4
+PyYAML==5.1
 requests==2.21.0
 urllib3==1.24.1
