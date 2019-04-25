@@ -15,7 +15,7 @@ curious).
 With normal settings, this will send notifications to your existing
 notification handler when a streamer is playing a game you've specified:
 
-![notification](https://i.imgur.com/4MM61Pk.png)
+[![notification](https://i.imgur.com/4MM61Pk.png)](https://www.twitch.tv/shroud)
 
 You'll also get a tray icon so you can easily quit the application:
 
