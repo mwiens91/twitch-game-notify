@@ -218,15 +218,19 @@ def process_notifications(
             )
 
 
-def send_connection_error_notification(send_dbus_notification):
+def send_connection_error_notification(send_dbus_notification, retry_seconds):
     """Logs and notifies about a connection failure.
 
     Arg:
         send_dbus_notification: A boolean specifying whether to send a
             notification to D-Bus.
+        retry_seconds: A string containing the number of seconds before
+            the next connection attempt.
     """
     # The message to show
-    error_message = "Unable to connect to Twitch. Is your internet okay?"
+    error_message = (
+        "Unable to connect to Twitch. Retrying in %ss" % retry_seconds
+    )
 
     # Show the message
     send_error_notification(error_message, send_dbus_notification)
@@ -246,10 +250,19 @@ def process_notifications_wrapper(*args, **kwargs):
         display_dbus_notification = True
 
     # Try calling process_notifications
+    retry_attempt = 0
+
     try:
         process_notifications(*args, **kwargs)
+
+        if retry_attempt:
+            retry_attempt = 0
     except requests.exceptions.ConnectionError:
-        # Bad connection - stop this iteration
+        # Bad connection - stop this iteration and wait
+        retry_attempt += 1
+        sleep_delta = 2 ** retry_attempt
+
         send_connection_error_notification(
-            send_dbus_notification=display_dbus_notification
+            send_dbus_notification=display_dbus_notification,
+            retry_seconds=sleep_delta,
         )

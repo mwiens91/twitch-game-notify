@@ -15,7 +15,6 @@ from twitchgamenotify.cache import (
     unlock_cache,
     save_cache,
 )
-from twitchgamenotify.constants import STARTING_CONNECTION_FAILURE_RETRY_TIME
 from twitchgamenotify.configuration import (
     ConfigFileNotFound,
     parse_config_file,
@@ -101,6 +100,8 @@ def main():
 
     # Connect to the API - keep retrying and be loud if there's a
     # connection error
+    retry_attempt = 0
+
     while True:
         try:
             twitch_api = TwitchApi(
@@ -108,22 +109,24 @@ def main():
                 client_secret=config_dict["twitch-api-client-secret"],
             )
 
-            # Successful connection
+            # Successful connection; reset retry attempts
+            if retry_attempt:
+                retry_attempt = 0
+
             break
         except requests.exceptions.ConnectionError:
             # Internet is probably down. Log an error and notify if we're
             # notifying
-            send_connection_error_notification(
-                send_dbus_notification=not cli_args.print_to_terminal
-            )
+            retry_attempt += 1
+            sleep_delta = 2 ** retry_attempt
 
-            logging.info(
-                "Retrying in %s seconds",
-                STARTING_CONNECTION_FAILURE_RETRY_TIME,
+            send_connection_error_notification(
+                send_dbus_notification=not cli_args.print_to_terminal,
+                retry_seconds=sleep_delta,
             )
 
             # Wait a bit before retrying
-            time.sleep(STARTING_CONNECTION_FAILURE_RETRY_TIME)
+            time.sleep(sleep_delta)
 
     # Set up arguments to give process_notifcations
     kwargs = dict(
