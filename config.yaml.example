@@ -44,24 +44,29 @@ streamers:
       - "21779"
 
 # For convenience, here are some of the IDs of some popular games on
-# Twitch (updated 2019-02-13):
+# Twitch (updated 2019-04-24):
 
 # 7 Days to Die: 271304
 # A Dance of Fire and Ice: 511183
 # Ace Combat 7: 492605
 # Age of Empires II: 13389
+# Albion Online: 417528
 # Always On: 499973
+# Anno 1800: 498638
 # Apex Legends: 511224
 # Arena of Valor: 498302
 # ARK: 489635
 # Art: 509660
 # Artifact: 16937
 # ASMR: 509659
+# Assassin's Creed Odyssey: 506274
 # ATLAS: 510825
+# Auto Chess: 511748
 # Battlefield V: 504199
 # Black Desert Online: 386821
 # Blade and Soul: 20423
 # Bomberman 64: 15910
+# Borderlands 2: 32345
 # Borderlands: The Pre-Sequel!: 460041
 # Business Tour: 497852
 # Call of Duty: Black Ops 4: 504462
@@ -69,12 +74,14 @@ streamers:
 # Call of Duty: WWII: 496712
 # Casino: 509576
 # Chess: 743
+# Cities: Skylines: 461449
 # Conan Exiles: 493551
 # Counter-Strike: Global Offensive: 32399
 # Creative: 488191
 # Crypto: 499634
 # Dark Souls III: 490292
 # Dark Souls: 29433
+# Days Gone: 497456
 # DayZ: 65632
 # Dead by Daylight: 491487
 # Deep Rock Galactic: 494839
@@ -86,6 +93,7 @@ streamers:
 # Divinity: Original Sin II: 490644
 # Dota 2: 29595
 # Dragon Ball FighterZ: 497385
+# Dragon Power: 16605
 # Dungeons & Dragons: 509577
 # Earthworm Jim 3D: 4055
 # Enter the Gungeon: 488632
@@ -98,12 +106,16 @@ streamers:
 # Far Cry: New Dawn: 510586
 # FIFA 18: 495589
 # FIFA 19: 506103
+# Final Fantasy VII: 11988
 # FINAL FANTASY XIV Online: 24241
 # Food & Drink: 509667
+# Forager: 499831
 # Fortnite: 33214
 # Frostpunk: 493549
+# FTL: Faster Than Light: 33882
 # Games + Demos: 66082
 # Gears of War 4: 459382
+# Golf It!: 495764
 # Grand Theft Auto V: 32982
 # Gwent: The Witcher Card Game: 493217
 # Halo: The Master Chief Collection: 417969
@@ -114,6 +126,7 @@ streamers:
 # Heroes of the Storm: 32959
 # Hidden Agenda: 7634
 # House Flipper: 498000
+# Imperator: Rome: 508297
 # inFamous: Second Son: 126292
 # Islands of Nyne: Battle Royale: 496512
 # Ju-On: The Grudge: 23394
@@ -141,7 +154,9 @@ streamers:
 # Metro: Last Light: 31836
 # Minecraft: 27471
 # Miscreated: 383341
+# MLB The Show 19: 510146
 # Monster Hunter World: 497467
+# Mortal Kombat 11: 510578
 # Music & Performing Arts: 26936
 # Music: 26936
 # NBA 2K18: 495056
@@ -151,6 +166,7 @@ streamers:
 # Old School RuneScape: 459931
 # osu!: 21465
 # Overwatch: 488552
+# Pagan Online: 512221
 # Paladins: 491115
 # Path of Exile: 29307
 # Perfect World: 20050
@@ -159,6 +175,9 @@ streamers:
 # Pokemon Ultra Sun/Ultra Moon: 497334
 # Pokemon: Let's Go, Pikachu!/Eevee!: 506237
 # Poker: 488190
+# Pokémon HeartGold/SoulSilver: 23857
+# Pokémon Platinum: 19745
+# Princess Connect! Re: Dive: 503988
 # Professor Layton vs. Phoenix Wright: Ace Attorney: 29625
 # PUBG MOBILE: 505884
 # Quake Champions: 496253
@@ -169,6 +188,7 @@ streamers:
 # Retro: 27284
 # RimWorld: 394568
 # Ring Of Elysium: 504954
+# Risk of Rain 2: 509110
 # Rocket League: 30921
 # Romancing SaGa 3: 2425
 # RuneScape: 2083
@@ -176,12 +196,15 @@ streamers:
 # Rust: 263490
 # Science & Technology: 509670
 # Sea of Thieves: 490377
+# Sekiro: Shadows Die Twice: 506415
 # Shin Megami Tensei: Nocturne: 15442
+# Shin Megami Tensei: Persona 3 FES: 18908
 # skribbl.io: 496983
 # Slay the Spire: 496902
 # Slots: 498566
 # Smite: 32507
 # Spellbreak: 509614
+# Splatoon 2: 495064
 # Star Citizen: 71375
 # StarCraft II: 490422
 # StarCraft: 11989
@@ -206,17 +229,21 @@ streamers:
 # The Legend of Zelda: Breath of the Wild: 110758
 # The Legend of Zelda: Majora's Mask: 12482
 # The Legend of Zelda: Ocarina of Time: 11557
+# The Long Dark: 418016
 # The Sims 4: 369252
 # The Witcher 3: Wild Hunt: 115977
 # theHunter: Call of the Wild: 494683
 # Tibia: 19619
 # Tom Clancy's Rainbow Six: Siege: 460630
+# Tom Clancy's The Division 2: 504463
 # Tom Clancy's The Division: 369579
 # Total War: Three Kingdoms: 502377
 # Total War: Warhammer II: 497434
 # Travel & Outdoors: 509672
+# Trials Rising: 506430
 # Tropico 5: 313445
 # Twitch Plays: 491180
+# Twitch Sings: 509481
 # VRChat: 499003
 # Warcraft III: The Frozen Throne: 12924
 # Warframe: 66170
@@ -225,6 +252,10 @@ streamers:
 # World of Tanks: 27546
 # World of Warcraft: 18122
 # World of Warships: 32502
+# World War Z: 500633
 # Wrestling Revolution: 103837
 # XCOM 2: War of the Chosen: 497435
 # Yakuza 0: 476269
+# Yakuza 6: The Song of Life: 490701
+# Yoshi's Crafted World: 497449
+# Yu-Gi-Oh! Duel Links: 494508
