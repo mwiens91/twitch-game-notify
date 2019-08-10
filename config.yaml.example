@@ -44,12 +44,13 @@ streamers:
       - "21779"
 
 # For convenience, here are some of the IDs of some popular games on
-# Twitch (updated 2019-04-24):
+# Twitch (updated 2019-08-09):
 
 # 7 Days to Die: 271304
 # A Dance of Fire and Ice: 511183
 # Ace Combat 7: 492605
 # Age of Empires II: 13389
+# Age of Wonders: Planetfall: 506105
 # Albion Online: 417528
 # Always On: 499973
 # Anno 1800: 498638
@@ -75,10 +76,12 @@ streamers:
 # Casino: 509576
 # Chess: 743
 # Cities: Skylines: 461449
+# Cliff Empire: 505856
 # Conan Exiles: 493551
 # Counter-Strike: Global Offensive: 32399
 # Creative: 488191
 # Crypto: 499634
+# Dark Souls II: Scholar of the First Sin: 489170
 # Dark Souls III: 490292
 # Dark Souls: 29433
 # Days Gone: 497456
@@ -91,7 +94,9 @@ streamers:
 # Diablo III: Reaper of Souls: 313558
 # Dig Or Die: 489162
 # Divinity: Original Sin II: 490644
+# Doom: 6715
 # Dota 2: 29595
+# Dota Underlords: 512693
 # Dragon Ball FighterZ: 497385
 # Dragon Power: 16605
 # Dungeons & Dragons: 509577
@@ -104,10 +109,12 @@ streamers:
 # Fallout 4: 489776
 # Fallout 76: 506246
 # Far Cry: New Dawn: 510586
+# Fate/Grand Order: 493048
 # FIFA 18: 495589
 # FIFA 19: 506103
 # Final Fantasy VII: 11988
 # FINAL FANTASY XIV Online: 24241
+# Fire Emblem: Three Houses: 495202
 # Food & Drink: 509667
 # Forager: 499831
 # Fortnite: 33214
@@ -115,6 +122,9 @@ streamers:
 # FTL: Faster Than Light: 33882
 # Games + Demos: 66082
 # Gears of War 4: 459382
+# GeoGuessr: 369418
+# Gibbous - A Cthulhu Adventure: 496052
+# God of War: 6369
 # Golf It!: 495764
 # Grand Theft Auto V: 32982
 # Gwent: The Witcher Card Game: 493217
@@ -126,14 +136,18 @@ streamers:
 # Heroes of the Storm: 32959
 # Hidden Agenda: 7634
 # House Flipper: 498000
+# Hunt: Showdown: 500188
 # Imperator: Rome: 508297
 # inFamous: Second Son: 126292
 # Islands of Nyne: Battle Royale: 496512
 # Ju-On: The Grudge: 23394
 # Jump Force: 506411
+# Jurassic World Evolution: 498459
 # Just Cause 4: 506384
 # Just Chatting: 509658
 # Katamari Damacy: 10902
+# Kerbal Space Program: 32742
+# Kindergarten: 23549
 # Kingdom Hearts HD I.5 + II.5 Remix: 494099
 # Kingdom Hearts III: 369585
 # Kingdom Two Crowns: 510344
@@ -142,6 +156,7 @@ streamers:
 # Lineage II: 8901
 # Lost Ark Online: 490100
 # Madden NFL 19: 506104
+# Madden NFL 20: 512371
 # Magic: The Gathering: 2748
 # Makers & Crafting: 509673
 # MapleStory 2: 488769
@@ -166,12 +181,15 @@ streamers:
 # Old School RuneScape: 459931
 # osu!: 21465
 # Overwatch: 488552
+# Oxygen Not Included: 493815
 # Pagan Online: 512221
 # Paladins: 491115
 # Path of Exile: 29307
 # Perfect World: 20050
+# Planet Coaster: 490384
 # PlanetSide 2: 26175
 # PLAYERUNKNOWN'S BATTLEGROUNDS: 493057
+# Please Love My Computer Game: 504234
 # Pokemon Ultra Sun/Ultra Moon: 497334
 # Pokemon: Let's Go, Pikachu!/Eevee!: 506237
 # Poker: 488190
@@ -185,10 +203,12 @@ streamers:
 # Red Dead Redemption 2: 493959
 # Rend: 496704
 # Resident Evil 2: 490868
+# Resident Evil 3: Nemesis: 5126
 # Retro: 27284
 # RimWorld: 394568
 # Ring Of Elysium: 504954
 # Risk of Rain 2: 509110
+# ROBLOX: 23020
 # Rocket League: 30921
 # Romancing SaGa 3: 2425
 # RuneScape: 2083
@@ -205,12 +225,16 @@ streamers:
 # Smite: 32507
 # Spellbreak: 509614
 # Splatoon 2: 495064
+# Sports & Fitness: 509671
 # Star Citizen: 71375
+# Star Wars Battlefront II: 492546
 # StarCraft II: 490422
 # StarCraft: 11989
+# Steel Circus: 511366
 # Street Fighter V: 488615
 # Summoners War: Sky Arena: 489111
 # Super Mario 64: 2692
+# Super Mario Maker 2: 511399
 # Super Mario Maker: 490608
 # Super Mario World: 1229
 # Super Metroid: 7595
@@ -219,6 +243,7 @@ streamers:
 # Super Smash Bros. Ultimate: 504461
 # Talk Shows & Podcasts: 417752
 # Team Fortress 2: 16676
+# Teamfight Tactics: 513143
 # Tekken 7: 461067
 # Terraria: 31376
 # The Elder Scrolls Online: 65654
@@ -233,6 +258,7 @@ streamers:
 # The Sims 4: 369252
 # The Witcher 3: Wild Hunt: 115977
 # theHunter: Call of the Wild: 494683
+# Thief Simulator: 510204
 # Tibia: 19619
 # Tom Clancy's Rainbow Six: Siege: 460630
 # Tom Clancy's The Division 2: 504463
@@ -254,6 +280,7 @@ streamers:
 # World of Warships: 32502
 # World War Z: 500633
 # Wrestling Revolution: 103837
+# Wrestling: 511998
 # XCOM 2: War of the Chosen: 497435
 # Yakuza 0: 476269
 # Yakuza 6: The Song of Life: 490701
