@@ -159,17 +159,17 @@ example configuration file [config.yaml.example](config.yaml.example):
 # A Dance of Fire and Ice: 511183
 # Ace Combat 7: 492605
 # Age of Empires II: 13389
+# Age of Wonders: Planetfall: 506105
+# AI: The Somnium Files: 508537
+# Albion Online: 417528
 # Always On: 499973
+# Anno 1800: 498638
 # Apex Legends: 511224
 # Arena of Valor: 498302
 # ARK: 489635
 # Art: 509660
 # Artifact: 16937
 # ASMR: 509659
-# ATLAS: 510825
-# Battlefield V: 504199
-# Black Desert Online: 386821
-# Blade and Soul: 20423
 # ...
 ```
 
