@@ -68,7 +68,7 @@ def find_config_file():
     """Find and return the path of a config file.
 
     The config file looked for is "config.yaml" and it is looked for at
-    the base of the respository first (if you're running from source),
+    the base of the repository first (if you're running from source),
     and then in $XDG_CONFIG_HOME/twitch-game-notify/ (XDG_CONFIG_HOME
     defaults to $HOME/.config).
 

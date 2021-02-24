@@ -30,7 +30,7 @@ from twitchgamenotify.version import NAME
 
 def graceful_exit(*_, **__):
     """Exit such that atexit gets triggered."""
-    logging.info("Exitting %s", NAME)
+    logging.info("Exiting %s", NAME)
     sys.exit(0)
 
 
@@ -128,7 +128,7 @@ def main():
             # Wait a bit before retrying
             time.sleep(sleep_delta)
 
-    # Set up arguments to give process_notifcations
+    # Set up arguments to give process_notifications
     kwargs = dict(
         print_to_terminal=cli_args.print_to_terminal,
         streamers=config_dict["streamers"],

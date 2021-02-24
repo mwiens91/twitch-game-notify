@@ -56,7 +56,7 @@ class TwitchApi:
         )
 
         try:
-            # Make the the HTTP request was okay
+            # Make sure the HTTP request was okay
             assert response.status_code == HTTP_200_OK
         except AssertionError:
             # The HTTP request wasn't okay
@@ -110,7 +110,7 @@ class TwitchApi:
             response = self.session.get(http_request_url)
 
         try:
-            # Make the the HTTP request was okay
+            # Make sure the HTTP request was okay
             assert response.status_code == HTTP_200_OK
         except AssertionError:
             # The HTTP request wasn't okay

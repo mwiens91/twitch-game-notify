@@ -40,7 +40,7 @@ def unlock_cache(catch_failure=True):
 
     Arg:
         catch_failure: An optional boolean signalling whether to ignore
-            a FileNotFoundError exception occuring when the cache lock
+            a FileNotFoundError exception occurring when the cache lock
             to remove doesn't exist.
     """
     # Build the path to the cache lock
