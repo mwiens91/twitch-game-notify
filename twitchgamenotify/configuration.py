@@ -21,8 +21,6 @@ from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
 class ConfigFileNotFound(Exception):
     """Raised when a config file can't be found."""
 
-    pass
-
 
 class PrintExampleConfigAction(argparse.Action):
     """argparse action to print example config file."""
