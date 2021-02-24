@@ -118,7 +118,7 @@ def main():
             # Internet is probably down. Log an error and notify if we're
             # notifying
             retry_attempt += 1
-            sleep_delta = 2 ** retry_attempt
+            sleep_delta = min(2 ** retry_attempt, 20)
 
             send_connection_error_notification(
                 send_dbus_notification=not cli_args.print_to_terminal,
