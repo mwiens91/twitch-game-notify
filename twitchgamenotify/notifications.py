@@ -86,7 +86,7 @@ def process_notifications(
             streamer. For example:
 
             {'macie_jay': {'include': '460630'},
-             'moonmoon_ow': {'include': '*', 'exclude': '33214'}}
+             'moonmoon': {'include': '*', 'exclude': '33214'}}
 
         streamers_previous_game: An optional dictionary containing
             information about what game a streamer was last seen

@@ -129,7 +129,7 @@ class TwitchApi:
 
         Arg:
             streamer_login_name: A string specifying the streamer's user
-                login name. E.g., moonmoon_ow.
+                login name. For example, moonmoon.
 
         Returns:
             A dictionary of information about the queried stream
@@ -165,7 +165,7 @@ class TwitchApi:
 
         Arg:
             streamer_login_name: A string specifying the streamer's user
-                login name. E.g., moonmoon_ow.
+                login name. For example, "moonmoon".
 
         Returns:
             A string containing the streamer's display name.
