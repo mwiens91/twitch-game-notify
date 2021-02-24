@@ -39,7 +39,7 @@ def unlock_cache(catch_failure=True):
     """Removes a cache lock file.
 
     Arg:
-        catch_failure: An optional boolean signalling whether to catch
+        catch_failure: An optional boolean signalling whether to ignore
             a FileNotFoundError exception occuring when the cache lock
             to remove doesn't exist.
     """
@@ -57,7 +57,7 @@ def unlock_cache(catch_failure=True):
 
 
 def load_cache():
-    """Loads a cache, or creates one if it doesn't exit.
+    """Loads a cache, or creates one if none exists.
 
     Returns:
         A dictionary containing static API data. For example:
