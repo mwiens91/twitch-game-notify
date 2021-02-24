@@ -88,7 +88,7 @@ def main():
     ):
         # Import this here so GTK-incompatible machines are still
         # supported
-        from twitchgamenotify.app_indicator import AppIndicator
+        from twitchgamenotify.app_indicator import AppIndicator # pylint: disable=import-outside-toplevel
 
         indicator = AppIndicator()
 

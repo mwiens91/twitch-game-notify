@@ -18,10 +18,7 @@ except ValueError as e:
     logging.error(e)
     _thread.interrupt_main()
 
-from gi.repository import (
-    Gtk,
-    AppIndicator3,
-)  # pylint: disable=wrong-import-order,wrong-import-position,ungrouped-imports
+from gi.repository import Gtk, AppIndicator3 # pylint: disable=wrong-import-order,wrong-import-position,ungrouped-imports
 
 
 class AppIndicator:
