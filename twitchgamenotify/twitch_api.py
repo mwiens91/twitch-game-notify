@@ -7,6 +7,7 @@ number on yet (so far as I can tell).
 import requests
 from twitchgamenotify.constants import (
     HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
     TWITCH_GAME_API_URL,
     TWITCH_STREAM_API_URL,
@@ -26,6 +27,10 @@ class FailedHttpRequest(Exception):
         # Record the status code and message
         self.status_code = http_status_code
         self.message = message
+
+
+class AuthenticationFailed(FailedHttpRequest):
+    """An exception when authentication fails."""
 
 
 class TwitchApi:
@@ -64,6 +69,17 @@ class TwitchApi:
                 "An access token fetch failed with status code %s"
                 % response.status_code
             )
+
+            # The Twitch API sends back a 400 if the auth info provided
+            # to it doesn't work (this is anecdotal; can't find any
+            # specific documentation that verifies this). Anyway,
+            # this is a special case that we should handle; otherwise
+            # it's some more specific error that we're not going to
+            # worry about handling nicely.
+            if response.status_code == HTTP_400_BAD_REQUEST:
+                raise AuthenticationFailed(
+                    message=message, http_status_code=response.status_code
+                )
 
             raise FailedHttpRequest(
                 message=message, http_status_code=response.status_code

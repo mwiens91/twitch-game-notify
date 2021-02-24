@@ -62,4 +62,5 @@ TWITCH_TOKEN_API_URL = "https://id.twitch.tv/oauth2/token"
 
 # HTTP status codes
 HTTP_200_OK = 200
+HTTP_400_BAD_REQUEST = 400
 HTTP_401_UNAUTHORIZED = 401

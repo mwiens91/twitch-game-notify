@@ -22,9 +22,10 @@ from twitchgamenotify.configuration import (
 )
 from twitchgamenotify.notifications import (
     process_notifications_wrapper,
+    send_authentication_error_notification,
     send_connection_error_notification,
 )
-from twitchgamenotify.twitch_api import TwitchApi
+from twitchgamenotify.twitch_api import AuthenticationFailed, TwitchApi
 from twitchgamenotify.version import NAME
 
 
@@ -114,6 +115,12 @@ def main():
                 retry_attempt = 0
 
             break
+        except AuthenticationFailed:
+            # The auth credentials provided are no good
+            send_authentication_error_notification(
+                send_dbus_notification=not cli_args.print_to_terminal,
+            )
+            sys.exit(1)
         except requests.exceptions.ConnectionError:
             # Internet is probably down. Log an error and notify if we're
             # notifying

@@ -221,7 +221,7 @@ def process_notifications(
 def send_connection_error_notification(send_dbus_notification, retry_seconds):
     """Logs and notifies about a connection failure.
 
-    Arg:
+    Args:
         send_dbus_notification: A boolean specifying whether to send a
             notification to D-Bus.
         retry_seconds: A string containing the number of seconds before
@@ -230,6 +230,22 @@ def send_connection_error_notification(send_dbus_notification, retry_seconds):
     # The message to show
     error_message = (
         "Unable to connect to Twitch. Retrying in %ss" % retry_seconds
+    )
+
+    # Show the message
+    send_error_notification(error_message, send_dbus_notification)
+
+
+def send_authentication_error_notification(send_dbus_notification):
+    """Logs and notifies about an authentication failure.
+
+    Arg:
+        send_dbus_notification: A boolean specifying whether to send a
+            notification to D-Bus.
+    """
+    # The message to show
+    error_message = (
+        "Invalid authentication credentials for Twitch API. Exiting."
     )
 
     # Show the message
