@@ -1,7 +1,7 @@
 """Provides a class to interact with a subset of the Twitch API.
 
 Specifically, the "new Twitch API", which they haven't put a version
-number on yet.
+number on yet (so far as I can tell).
 """
 
 import requests
@@ -82,9 +82,10 @@ class TwitchApi:
         will be true for everything passed to this function within the
         scope of this program.
 
-        If an access token is expired, another one is obtained.
+        If the current access token has expired during a call to this
+        method, a fresh access token is obtained.
 
-        Args:
+        Arg:
             http_request_url: A string containing the URL to make an
                 HTTP request to.
 
@@ -128,7 +129,7 @@ class TwitchApi:
         """Requests info about an online stream.
 
         Arg:
-            streamer_login_name: A string specifying the streamer's user
+            streamer_login_name: A string specifying the streamer's
                 login name. For example, moonmoon.
 
         Returns:
@@ -164,7 +165,7 @@ class TwitchApi:
         """Get a streamer's display name given their login name.
 
         Arg:
-            streamer_login_name: A string specifying the streamer's user
+            streamer_login_name: A string specifying the streamer's
                 login name. For example, "moonmoon".
 
         Returns:
@@ -179,7 +180,7 @@ class TwitchApi:
         return response.json()["data"][0]["display_name"]
 
     def get_game_title(self, game_id):
-        """Get a game's title given its ID.
+        """Get a game's title given the game's ID.
 
         Arg:
             game_id: A string containing a Twitch game ID.
