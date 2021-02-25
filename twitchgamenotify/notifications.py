@@ -5,6 +5,7 @@ import logging
 import time
 import notify2
 import requests
+from twitchgamenotify.constants import HTTP_502_BAD_GATEWAY
 from twitchgamenotify.twitch_api import FailedHttpRequest
 from twitchgamenotify.version import NAME
 
@@ -60,166 +61,6 @@ def send_error_notification(error_message, send_dbus_notification):
         ).show()
 
 
-def process_notifications(
-    streamers,
-    twitch_api,
-    names_cache=None,
-    streamers_previous_game=None,
-    print_to_terminal=False,
-):
-    """Query the Twitch API for all streamers and display notifications.
-
-    The whole function is a big loop going over all the streamers present
-    in the config file. This is a good target for refactoring, but the function
-    isn't unreadable as is.
-
-    Args:
-        names_cache: An optional dictionary containing cached names for
-            games and streamers. For example:
-
-            {"games": {"460630": "Tom Clancy's Rainbow Six: Siege"},
-             "streamers": {"macie_jay": "Macie_Jay"}}
-
-            Defaults to None.
-        print_to_terminal: An optional boolean signalling whether to
-            print to the terminal instead of passing a message to D-Bus.
-            Defaults to False.
-        streamers: A dictionary of streamers where the keys are strings
-            containing the streamer's login name and the values are
-            dictionaries containing the user's settings for the
-            streamer. For example:
-
-            {'macie_jay': {'include': '460630'},
-             'moonmoon': {'include': '*', 'exclude': '33214'}}
-        streamers_previous_game: An optional dictionary containing
-            information about what game a streamer was last seen
-            playing.  The keys are strings containing the streamers
-            login name, and the keys are strings containing the game ID
-            of what they were last seen playing (or an empty string if
-            the streamer hasn't yet been seen live). This defaults to
-            None, which is used when this function is only being called
-            once.
-        twitch_api: An authenticated TwitchApi object to interact with
-            Twitch's API.
-    """
-    # Look up info about each streamer's stream
-    for streamer_login_name, games in streamers.items():
-        try:
-            # Get info about stream
-            info = twitch_api.get_online_stream_info(streamer_login_name)
-        except FailedHttpRequest as e:
-            # Bad HTTP request! Log the error and move onto the next
-            # streamer!
-            send_error_notification(e.message, not print_to_terminal)
-
-            continue
-
-        # If the streamer isn't live, record that they aren't playing
-        # anything and move onto the next streamer
-        if not info["live"]:
-            # Mark them as last seen playing nothing
-            if (
-                streamers_previous_game
-                and streamers_previous_game[streamer_login_name]
-            ):
-                streamers_previous_game[streamer_login_name] = ""
-
-            continue
-
-        # Check if this is a game to notify about
-        game_id = info["game_id"]
-
-        # If the streamer was last seen playing this game, move on. If
-        # they are playing something new, record it.
-        if streamers_previous_game:
-            if streamers_previous_game[streamer_login_name] == game_id:
-                # The streamer is playing the same game as before
-                continue
-
-            # Streamer is playing something new. Update the previously
-            # seen game.
-            streamers_previous_game[streamer_login_name] = game_id
-
-        # Check the include (and possibly exclude) list
-        if "*" in games["include"]:
-            # All games are included. Check if we need to exclude any
-            # games.
-            if "exclude" in games and game_id in games["exclude"]:
-                continue
-        elif game_id not in games["include"]:
-            # Game not in the include list
-            continue
-
-        # Gather info about the stream. Lookup info in the cache first
-        # if it's available.
-        if names_cache is not None:
-            # Try getting the display name from the cache
-            try:
-                streamer_display_name = names_cache["streamers"][
-                    streamer_login_name
-                ]
-            except KeyError:
-                # Fetch it
-                try:
-                    streamer_display_name = twitch_api.get_streamer_display_name(
-                        streamer_login_name
-                    )
-                except FailedHttpRequest as e:
-                    # Bad HTTP request! Log the error and move onto the next
-                    # streamer!
-                    send_error_notification(e.message, not print_to_terminal)
-
-                    continue
-
-                # Store it
-                names_cache["streamers"][
-                    streamer_login_name
-                ] = streamer_display_name
-
-            # Try getting the game title from the cache
-            try:
-                game_title = names_cache["games"][game_id]
-            except KeyError:
-                # Fetch it
-                try:
-                    game_title = twitch_api.get_game_title(game_id)
-                except FailedHttpRequest as e:
-                    # Bad HTTP request! Log the error and move onto the next
-                    # streamer!
-                    send_error_notification(e.message, not print_to_terminal)
-
-                    continue
-
-                # Store it
-                names_cache["games"][game_id] = game_title
-        else:
-            # Not using cache. Fetch everything.
-            try:
-                streamer_display_name = twitch_api.get_streamer_display_name(
-                    streamer_login_name
-                )
-                game_title = twitch_api.get_game_title(game_id)
-            except FailedHttpRequest as e:
-                # Bad HTTP request! Log the error and move onto the next
-                # streamer!
-                send_error_notification(e.message, not print_to_terminal)
-
-                continue
-
-        # Title is never cached
-        stream_title = info["title"]
-
-        # Send a notification
-        if print_to_terminal:
-            print_notification_to_terminal(
-                streamer_display_name, stream_title, game_title
-            )
-        else:
-            send_notification_to_dbus(
-                streamer_display_name, stream_title, game_title
-            )
-
-
 def send_connection_error_notification(send_dbus_notification, retry_seconds):
     """Logs and notifies about a connection failure.
 
@@ -252,6 +93,221 @@ def send_authentication_error_notification(send_dbus_notification):
 
     # Show the message
     send_error_notification(error_message, send_dbus_notification)
+
+
+def handle_failed_http_request(e, ignore_502s, print_to_terminal):
+    """Handle a failed HTTP request occuring when querying the Twitch API.
+
+    Args:
+        e: An exception of type FailedHttpRequest.
+        ignore_502s: A boolean signaling whether to ignore 502 errors when
+            querying the Twitch API.
+        print_to_terminal: A boolean signalling whether to
+            print to the terminal instead of passing a message to D-Bus.
+    """
+    if (
+        not ignore_502s
+        or ignore_502s
+        and e.status_code != HTTP_502_BAD_GATEWAY
+    ):
+        send_error_notification(e.message, not print_to_terminal)
+
+
+def process_notifications_for_streamer(
+    streamer_login_name,
+    games,
+    twitch_api,
+    ignore_502s,
+    names_cache,
+    streamers_previous_game,
+    print_to_terminal,
+):
+    """Query the Twitch API for a spcific streamer and display notifications.
+
+    Args:
+        ignore_502s: A boolean signaling whether to ignore 502 errors when
+            querying the Twitch API.
+        games: A dictionary containing information about what games to
+            allow (or disallow) for the streamer. See the configuration
+            file for how these look.
+        names_cache: A dictionary containing cached names for
+            games and streamers. Can be None
+        print_to_terminal: A boolean signalling whether to
+            print to the terminal instead of passing a message to D-Bus.
+        streamer_login_name: A string containing the login name of the
+            streamer to process notifications for.
+        streamers_previous_game: A dictionary containing
+            information about what game a streamer was last seen
+            playing.  The keys are strings containing the streamers
+            login name, and the keys are strings containing the game ID
+            of what they were last seen playing (or an empty string if
+            the streamer hasn't yet been seen live). Can be None.
+        twitch_api: An authenticated TwitchApi object to interact with
+            Twitch's API.
+    """
+    try:
+        # Get info about stream
+        info = twitch_api.get_online_stream_info(streamer_login_name)
+    except FailedHttpRequest as e:
+        handle_failed_http_request(e, ignore_502s, print_to_terminal)
+
+        return
+
+    # If the streamer isn't live, record that they aren't playing
+    # anything and move onto the next streamer
+    if not info["live"]:
+        # Mark them as last seen playing nothing
+        if (
+            streamers_previous_game
+            and streamers_previous_game[streamer_login_name]
+        ):
+            streamers_previous_game[streamer_login_name] = ""
+
+        return
+
+    # Check if this is a game to notify about
+    game_id = info["game_id"]
+
+    # If the streamer was last seen playing this game, move on. If
+    # they are playing something new, record it.
+    if streamers_previous_game:
+        if streamers_previous_game[streamer_login_name] == game_id:
+            # The streamer is playing the same game as before
+            return
+
+        # Streamer is playing something new. Update the previously
+        # seen game.
+        streamers_previous_game[streamer_login_name] = game_id
+
+    # Check the include (and possibly exclude) list
+    if "*" in games["include"]:
+        # All games are included. Check if we need to exclude any
+        # games.
+        if "exclude" in games and game_id in games["exclude"]:
+            return
+    elif game_id not in games["include"]:
+        # Game not in the include list
+        return
+
+    # Gather info about the stream. Lookup info in the cache first
+    # if it's available.
+    if names_cache is not None:
+        # Try getting the display name from the cache
+        try:
+            streamer_display_name = names_cache["streamers"][
+                streamer_login_name
+            ]
+        except KeyError:
+            # Fetch it
+            try:
+                streamer_display_name = twitch_api.get_streamer_display_name(
+                    streamer_login_name
+                )
+            except FailedHttpRequest as e:
+                handle_failed_http_request(e, ignore_502s, print_to_terminal)
+
+                return
+
+            # Store it
+            names_cache["streamers"][
+                streamer_login_name
+            ] = streamer_display_name
+
+        # Try getting the game title from the cache
+        try:
+            game_title = names_cache["games"][game_id]
+        except KeyError:
+            # Fetch it
+            try:
+                game_title = twitch_api.get_game_title(game_id)
+            except FailedHttpRequest as e:
+                handle_failed_http_request(e, ignore_502s, print_to_terminal)
+
+                return
+
+            # Store it
+            names_cache["games"][game_id] = game_title
+    else:
+        # Not using cache. Fetch everything.
+        try:
+            streamer_display_name = twitch_api.get_streamer_display_name(
+                streamer_login_name
+            )
+            game_title = twitch_api.get_game_title(game_id)
+        except FailedHttpRequest as e:
+            handle_failed_http_request(e, ignore_502s, print_to_terminal)
+
+            return
+
+    # Title is never cached
+    stream_title = info["title"]
+
+    # Send a notification
+    if print_to_terminal:
+        print_notification_to_terminal(
+            streamer_display_name, stream_title, game_title
+        )
+    else:
+        send_notification_to_dbus(
+            streamer_display_name, stream_title, game_title
+        )
+
+
+def process_notifications(
+    streamers,
+    twitch_api,
+    ignore_502s,
+    names_cache=None,
+    streamers_previous_game=None,
+    print_to_terminal=False,
+):
+    """Query the Twitch API for all streamers and display notifications.
+
+    The whole function is a big loop going over all the streamers present
+    in the config file.
+
+    Args:
+        ignore_502s: A boolean signaling whether to ignore 502 errors when
+            querying the Twitch API.
+        names_cache: An optional dictionary containing cached names for
+            games and streamers. For example:
+
+            {"games": {"460630": "Tom Clancy's Rainbow Six: Siege"},
+             "streamers": {"macie_jay": "Macie_Jay"}}
+
+            Defaults to None.
+        print_to_terminal: An optional boolean signalling whether to
+            print to the terminal instead of passing a message to D-Bus.
+            Defaults to False.
+        streamers: A dictionary of streamers where the keys are strings
+            containing the streamer's login name and the values are
+            dictionaries containing the user's settings for the
+            streamer. For example:
+
+            {'macie_jay': {'include': '460630'},
+             'moonmoon': {'include': '*', 'exclude': '33214'}}
+        streamers_previous_game: An optional dictionary containing
+            information about what game a streamer was last seen
+            playing.  The keys are strings containing the streamers
+            login name, and the keys are strings containing the game ID
+            of what they were last seen playing (or an empty string if
+            the streamer hasn't yet been seen live). This defaults to
+            None, which is used when this function is only being called
+            once.
+        twitch_api: An authenticated TwitchApi object to interact with
+            Twitch's API.
+    """
+    # Look up info about each streamer's stream
+    for streamer_login_name, games_dict in streamers.items():
+        process_notifications_for_streamer(
+            streamer_login_name,
+            games_dict,
+            twitch_api,
+            ignore_502s,
+            names_cache,
+            streamers_previous_game,
+            print_to_terminal,
+        )
 
 
 def process_notifications_wrapper(*args, **kwargs):

@@ -43,3 +43,14 @@ streamers:
       - "*"
     exclude:
       - "21779"
+
+# Ignore 502 "Bad Gateway" errors: these are going to occur somewhat
+# randomly and don't necessarily mean anything is wrong. For "one-shot"
+# usage you probably want to know when one of these occurs, so you'll
+# know if your information is correct; for persistant usage, since the
+# 502 errors are somewhat random, if one occurs, you'll likely get the
+# information you want on the next cycle. I recommend that you leave
+# these settings as is unless you're debugging a connectivity problem or
+# some other issues.
+ignore-502-errors-one-shot: false
+ignore-502-errors-persistant: true

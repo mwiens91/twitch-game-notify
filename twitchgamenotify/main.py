@@ -144,6 +144,12 @@ def main():
         twitch_api=twitch_api,
     )
 
+    if cli_args.one_shot:
+        kwargs["ignore_502s"] = config_dict["ignore-502-one-shot"]
+    else:
+        kwargs["ignore_502s"] = config_dict["ignore-502-errors-persistant"]
+
+
     if not cli_args.no_caching:
         kwargs["names_cache"] = cache_dict
 
