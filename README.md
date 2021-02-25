@@ -7,24 +7,20 @@
 # twitch-game-notify
 
 This is a Twitch notifier which notifies you when your favourite
-steamers play your favourite games. Officially, Ubuntu >= 16.04 is
-supported, but other Linux distros and possibly even Mac OSs may also
-work (contact me if you have it running on another distro or OS—I'm
-curious).
+steamers stream your favourite things. Any flavour of unix that
+supports GTK3 should work with this.
 
 With normal settings, this will send notifications to your existing
-notification handler when a streamer is playing a game you've specified:
+notification handler when a streamer is playing a game you've specified.
+There's also a tray icon so you can easily quit the application.
 
-[![notification](https://i.imgur.com/4MM61Pk.png)](https://www.twitch.tv/shroud)
-
-You'll also get a tray icon so you can easily quit the application:
-
-![tray-icon](https://i.imgur.com/uDdtJDa.png)
 
 ## Installation
 
-We'll need to install a few dependencies first. I'll assume you're on
-Ubuntu.
+There are a few dependencies needed for this. I'll write
+commands to install the dependencies for Ubuntu; however,
+these packages are common, so translating this to whatever
+package manager you use should be fairly easy.
 
 To get the dependencies needed for D-Bus notifications and for
 displaying an icon in the system tray, run
@@ -34,42 +30,51 @@ sudo apt install libdbus-1-dev libdbus-glib-1-dev \
                  libcairo2-dev libgirepository1.0-dev
 ```
 
-If you want to install twitch-game-notify globally on your machine (cf.
-running from source directly from
+If you want to install twitch-game-notify globally on your machine (you
+could also run this from the from source code directly from
 [run_twitchgamenotify.py](run_twitchgamenotify.py)), install it using
-pip with
+pip with or without root as in
 
 ```
 sudo pip3 install twitch-game-notify
 ```
 
 Running the above command with root isn't strictly necessary, but it'll
-put the `twitch-game-notify` binary on your `$PATH`, which is nice.
+put `twitch-game-notify` in your `$PATH`, which is nice.
 
 ## Configuration
 
-Configuration files look like the following:
+Configuration files something look like the following:
 
 ```yaml
-query-period: 5
+# Twitch API authorization - see https://dev.twitch.tv/docs/api/
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
+
+# Streamers: a list of streamer login names, and for each, which
+# games/game IDs to notify about
 streamers:
-  "macie_jay":     # Macie_Jay
+  "shroud":
     include:
-      - "460630"   # notify my when Macie plays Rainbow Six: Siege
-  "moonmoon_ow":   # MOONMOON_OW
+      - "Valorant" # notify me only when shroud plays Rainbow Six: Siege
+  "hasanabi":
     include:
-      - "*"        # notify me when Moon plays any game
+      - "*"        # notify me when Hasan plays any game
     exclude:
-      - "33214"    # except for Fortnite
+      - "Just Chatting"    # except for when he's Just Chatting
+  "loltyler1":
+    include:
+      - "*"        # notify me when Tyler1 plays any game
+    exclude:
+      - "21779"    # except for League of Legends
+
 ```
 
-There's a `query-period`, which specifies how often the main loop
-happens for querying the streamers you've specified (in seconds).
-There's a `twitch-api-client-id` and `twitch-api-client-secret`, which
-we'll get to in a second. Then there's a list of streamers, which for
-each you specify what games you want to be notified about.
+Here you need to put in your authentication credentials, and specify
+what streamers you care about and what things they stream that you care
+about (or don't care about). Note that you can specify games using
+either their name as they appear on Twitch or by their internal game
+IDs—either is fine.
 
 ### Setting up a configuration file
 
@@ -88,11 +93,11 @@ To get started, either copy the example configuration file
 (making sure to rename it to `config.yaml`) or run
 
 ```
-twitch-game-notify --print-config > $DEST/config.yaml
+twitch-game-notify --print-config
 ```
 
-which downloads the example configuration file from GitHub and prints it
-to the terminal, which you can then redirect to a file.
+which prints the example config file
+to the terminal, which you can redirect to a file.
 
 ### Getting a Twitch API client ID and client secret
 
@@ -101,77 +106,6 @@ or link an existing Twitch account with [Twitch's dev
 portal](https://dev.twitch.tv/). Up to date instructions for obtaining a
 client ID and client secret can be found at
 [dev.twitch.tv/docs/authentication](https://dev.twitch.tv/docs/authentication/).
-
-### Constructing the streamers list
-
-The streamers list has a bunch of streamer login names. For example,
-[MOONMOON_OW](https://www.twitch.tv/moonmoon_ow)'s login name is
-moonmoon_ow, which can be easily found from his stream's URL:
-
-```
-https://www.twitch.tv/moonmoon_ow
-```
-
-For each streamer you can include games you want to be notified about.
-For example,
-
-```yaml
-streamers:
-  "macie_jay":     # Macie_Jay
-    include:
-      - "460630"   # notify my when Macie plays Rainbow Six: Siege
-```
-
-where 460630 is the game ID for Tom Clancy's Rainbow Six: Siege.
-
-If you want to be notified when a streamer plays any game you can use
-`"*"`. For example,
-
-```yaml
-streamers:
-  "moonmoon_ow":   # MOONMOON_OW
-    include:
-      - "*"        # notify me when Moon plays any game
-```
-
-If you want to be notified about every game *except* specific games, you
-can also specify an `exclude` section along with `"*"`. For example,
-
-```yaml
-streamers:
-  "moonmoon_ow":   # MOONMOON_OW
-    include:
-      - "*"        # notify me when Moon plays any game
-    exclude:
-      - "33214"    # except for Fortnite
-```
-
-where 33214 is the game ID for Fortnite.
-
-You can find out what the game ID for a given game is by querying the
-Twitch API directly (see [their
-reference](https://dev.twitch.tv/docs/api/reference/#get-games) for
-how). For convenience, a list of popular games' IDs are listed in the
-example configuration file [config.yaml.example](config.yaml.example):
-
-```yaml
-# 7 Days to Die: 271304
-# A Dance of Fire and Ice: 511183
-# Ace Combat 7: 492605
-# Age of Empires II: 13389
-# Age of Wonders: Planetfall: 506105
-# AI: The Somnium Files: 508537
-# Albion Online: 417528
-# Always On: 499973
-# Anno 1800: 498638
-# Apex Legends: 511224
-# Arena of Valor: 498302
-# ARK: 489635
-# Art: 509660
-# Artifact: 16937
-# ASMR: 509659
-# ...
-```
 
 ## Usage
 
@@ -192,15 +126,3 @@ For a list of everything you can do with twitch-game-notify, run
 ```
 twitch-game-notify --help
 ```
-
-## Rate limits
-
-The Twitch API allows for 120 API queries per minute. When you first
-start up twitch-game-notify, you're going to be using up to 3 API
-queries per streamer you've specified. When you've been running
-twitch-game-notify for awhile, most of the static API data will be
-cached and you're going be using ~1 API query per streamer.
-
-As a rough estimate, if you have `N` streamers on your list, you're
-going to want to have a `query-period` of a little above `N / 2`
-seconds.
