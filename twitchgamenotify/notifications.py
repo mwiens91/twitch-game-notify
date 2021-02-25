@@ -25,8 +25,8 @@ def print_notification_to_terminal(streamer_name, stream_title, game_name):
     """
     print(ANSI_BOLD + streamer_name + ANSI_END, end="")
     print(" @ " + datetime.datetime.now().isoformat())
+    print("Streaming %s" % game_name)
     print("Title: %s" % stream_title)
-    print("Playing: %s" % game_name)
 
 
 def send_notification_to_dbus(streamer_name, stream_title, game_name):
@@ -39,7 +39,7 @@ def send_notification_to_dbus(streamer_name, stream_title, game_name):
     """
     notify2.Notification(
         streamer_name + " @ " + time.strftime("%H:%M"),
-        "Title: %s\nPlaying: %s" % (stream_title, game_name),
+        "Streaming %s\nTitle: %s" % (game_name, stream_title),
     ).show()
 
 
