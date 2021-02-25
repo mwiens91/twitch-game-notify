@@ -85,10 +85,13 @@ class TwitchApi:
                 message=message, http_status_code=response.status_code
             )
 
-        # Set the access token
+        # Set the access token and client ID in the session headers
         access_token = response.json()["access_token"]
         self.session.headers.update(
-            {"Authorization": "Bearer " + access_token}
+            {
+                "Authorization": "Bearer " + access_token,
+                "Client-Id": self.client_id,
+            }
         )
 
     def make_http_request(self, http_request_url):
