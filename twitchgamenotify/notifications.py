@@ -317,11 +317,7 @@ def process_notifications_wrapper(*args, **kwargs):
     blocks into the process_notifications function.
     """
     # Determine whether to print to the terminal
-    try:
-        display_dbus_notification = not kwargs["print_to_terminal"]
-    except KeyError:
-        # In accordance with print_to_terminal defaulting to False
-        display_dbus_notification = True
+    display_dbus_notification = not kwargs["print_to_terminal"]
 
     # Try calling process_notifications
     retry_attempt = 0
