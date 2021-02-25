@@ -8,7 +8,7 @@ import _thread  # pylint: disable=wrong-import-order
 import logging
 import gi
 from twitchgamenotify.constants import APP_INDICATOR_SVG_PATH
-from twitchgamenotify.version import NAME
+from twitchgamenotify.version import NAME, VERSION
 
 # Make sure our GTK stuff is good before loading the app indicator
 try:
@@ -38,7 +38,9 @@ class AppIndicator:
         self.menu.append(item_quit)
         self.menu.show_all()
 
-        self.indicator = Gtk.StatusIcon(title=NAME, tooltip_text=NAME)
+        self.indicator = Gtk.StatusIcon(
+            title=NAME, tooltip_text=NAME + " " + VERSION
+        )
         self.indicator.set_from_file(APP_INDICATOR_SVG_PATH)
         self.indicator.connect("popup-menu", self.on_popup_menu)
 
