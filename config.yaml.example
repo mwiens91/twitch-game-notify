@@ -17,8 +17,8 @@ query-period: 3
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 
-# Streamers: a list of streamer login names, and for each, which game
-# IDs to notify about
+# Streamers: a list of streamer login names, and for each, which
+# games/game IDs to notify about
 streamers:
   "macie_jay":     # Macie_Jay
     include:

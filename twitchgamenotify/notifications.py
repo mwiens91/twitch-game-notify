@@ -164,6 +164,7 @@ def process_notifications_for_streamer(
 
     # Check if this is a game to notify about
     game_id = info["game_id"]
+    game_name = info["game_name"]
 
     # If the streamer was last seen playing this game, move on. If
     # they are playing something new, record it.
@@ -180,9 +181,11 @@ def process_notifications_for_streamer(
     if "*" in games["include"]:
         # All games are included. Check if we need to exclude any
         # games.
-        if "exclude" in games and game_id in games["exclude"]:
+        if "exclude" in games and (
+            game_id in games["exclude"] or game_name in games["exclude"]
+        ):
             return
-    elif game_id not in games["include"]:
+    elif game_id not in games["include"] or game_name not in games["include"]:
         # Game not in the include list
         return
 
