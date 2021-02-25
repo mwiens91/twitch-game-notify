@@ -16,6 +16,7 @@ from twitchgamenotify.cache import (
     save_cache,
 )
 from twitchgamenotify.configuration import (
+    ConfigFileInvalid,
     ConfigFileNotFound,
     parse_config_file,
     parse_runtime_args,
@@ -75,6 +76,9 @@ def main():
         config_dict = parse_config_file()
     except ConfigFileNotFound:
         logging.error("Config file not found. Aborting.")
+        sys.exit(1)
+    except ConfigFileInvalid:
+        logging.error("Config file invalid. Aborting.")
         sys.exit(1)
 
     # Set up the notifier
@@ -148,7 +152,6 @@ def main():
         kwargs["ignore_502s"] = config_dict["ignore-502-one-shot"]
     else:
         kwargs["ignore_502s"] = config_dict["ignore-502-errors-persistant"]
-
 
     if not cli_args.no_caching:
         kwargs["names_cache"] = cache_dict

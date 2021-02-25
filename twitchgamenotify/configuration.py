@@ -2,6 +2,7 @@
 
 import argparse
 import os.path
+from schema import And, Optional, Or, Schema
 import sys
 import yaml
 from twitchgamenotify.cache import unlock_cache
@@ -15,6 +16,10 @@ from twitchgamenotify.constants import (
     WARNING,
 )
 from twitchgamenotify.version import NAME, VERSION, DESCRIPTION
+
+
+class ConfigFileInvalid(Exception):
+    """Raised when a config file is invalid."""
 
 
 class ConfigFileNotFound(Exception):
@@ -87,14 +92,40 @@ def find_config_file():
 
 
 def parse_config_file():
-    """Find and parse a config file."""
+    """Find, parse, and validate a config file.
+
+    Returns:
+        A dictionary containing settings in user config file.
+    """
     # Find the config file first
     config_path = find_config_file()
 
     # Now parse and return it - note that PyYAML doesn't come with any
     # schema validation, which might be desirable at some point
     with open(config_path, "r") as config_file:
-        return yaml.safe_load(config_file)
+        config_dict = yaml.safe_load(config_file)
+
+    # Build the schema for the config file, and validate what we have
+    schema = Schema(
+        {
+            "query-period": And(Or(float, int), lambda x: x > 0),
+            "twitch-api-client-id": And(str, len),
+            "twitch-api-client-secret": And(str, len),
+            "streamers": {
+                And(str, len): {
+                    "include": [And(str, len)],
+                    Optional("exclude"): [And(str, len)],
+                }
+            },
+            "ignore-502-errors-one-shot": bool,
+            "ignore-502-errors-persistant": bool,
+        }
+    )
+
+    if not schema.is_valid(config_dict):
+        raise ConfigFileInvalid
+
+    return config_dict
 
 
 def parse_runtime_args():

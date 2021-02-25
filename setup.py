@@ -52,5 +52,6 @@ setup(
         "PyGObject",
         "PyYAML",
         "requests",
+        "schema",
     ],
 )

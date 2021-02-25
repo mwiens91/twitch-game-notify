@@ -1,5 +1,6 @@
 certifi==2020.12.5
 chardet==4.0.0
+contextlib2==0.6.0.post1
 dbus-python==1.2.16
 idna==2.10
 notify2==0.3.1
@@ -7,4 +8,5 @@ pycairo==1.20.0
 PyGObject==3.38.0
 PyYAML==5.4.1
 requests==2.25.1
+schema==0.7.4
 urllib3==1.26.3
