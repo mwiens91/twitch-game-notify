@@ -90,7 +90,7 @@ def find_config_file():
     if os.path.exists(config_path):
         return config_path
 
-    # Couldn't find anything :thinking:
+    # Couldn't find anything
     raise ConfigFileNotFound
 
 

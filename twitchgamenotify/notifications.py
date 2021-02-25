@@ -67,7 +67,11 @@ def process_notifications(
     streamers_previous_game=None,
     print_to_terminal=False,
 ):
-    """Query the Twitch API for all streamers and display notications.
+    """Query the Twitch API for all streamers and display notifications.
+
+    The whole function is a big loop going over all the streamers present
+    in the config file. This is a good target for refactoring, but the function
+    isn't unreadable as is.
 
     Args:
         names_cache: An optional dictionary containing cached names for
@@ -87,14 +91,13 @@ def process_notifications(
 
             {'macie_jay': {'include': '460630'},
              'moonmoon': {'include': '*', 'exclude': '33214'}}
-
         streamers_previous_game: An optional dictionary containing
             information about what game a streamer was last seen
             playing.  The keys are strings containing the streamers
             login name, and the keys are strings containing the game ID
             of what they were last seen playing (or an empty string if
             the streamer hasn't yet been seen live). This defaults to
-            None, which is useful if this function is only being called
+            None, which is used when this function is only being called
             once.
         twitch_api: An authenticated TwitchApi object to interact with
             Twitch's API.
