@@ -2,8 +2,8 @@
 
 import argparse
 import os.path
-from schema import And, Optional, Or, Schema
 import sys
+from schema import And, Optional, Or, Schema
 import yaml
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
