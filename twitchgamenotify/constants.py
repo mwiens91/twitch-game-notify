@@ -7,6 +7,10 @@ import os
 # Base of the repository/project
 PROJECT_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Path to example config file
+EXAMPLE_CONFIG_FILE_PATH = os.path.join(
+    PROJECT_BASE_DIR, "config.yaml.example"
+)
 
 # Path to the app indicator icon
 APP_INDICATOR_SVG_PATH = os.path.join(
@@ -29,10 +33,6 @@ except KeyError:
 CONFIG_FILE_NAME = "config.yaml"
 CACHE_FILE_NAME = "cache.json"
 CACHE_FILE_LOCK_NAME = CACHE_FILE_NAME + ".lock"
-
-
-# URL for example config file on Github
-EXAMPLE_CONFIG_FILE_URL = "https://raw.githubusercontent.com/mwiens91/twitch-game-notify/master/config.yaml.example"
 
 
 # Loglevel CLI options

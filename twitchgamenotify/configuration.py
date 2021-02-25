@@ -3,12 +3,11 @@
 import argparse
 import os.path
 import sys
-import requests
 import yaml
 from twitchgamenotify.cache import unlock_cache
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
-    EXAMPLE_CONFIG_FILE_URL,
+    EXAMPLE_CONFIG_FILE_PATH,
     LOGLEVEL_CHOICES,
     LOGLEVEL_DICT,
     PROJECT_BASE_DIR,
@@ -26,18 +25,11 @@ class PrintExampleConfigAction(argparse.Action):
     """argparse action to print example config file."""
 
     def __call__(self, parser, namespace, values, option_string=None):
-        """Download and print example config file."""
-        r = requests.get(EXAMPLE_CONFIG_FILE_URL)
+        """Print example config file."""
+        with open(EXAMPLE_CONFIG_FILE_PATH, "r") as f:
+            print(f.read())
 
-        if r.status_code != 200:
-            print(
-                "ERROR: Failed to download example config file!",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        else:
-            print(r.content.decode())
-            sys.exit(0)
+        sys.exit(0)
 
 
 class RemoveCacheLockAction(argparse.Action):
@@ -139,7 +131,7 @@ def parse_runtime_args():
         "--print-config",
         nargs=0,
         action=PrintExampleConfigAction,
-        help="downloads and prints example config file",
+        help="prints example config file to terminal",
     )
     parser.add_argument(
         "--print-to-terminal",
