@@ -146,7 +146,6 @@ def process_notifications(
             # games.
             if "exclude" in games and game_id in games["exclude"]:
                 continue
-
         elif game_id not in games["include"]:
             # Game not in the include list
             continue
