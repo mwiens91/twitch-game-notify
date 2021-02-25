@@ -8,13 +8,6 @@ import signal
 import sys
 import notify2
 import requests
-from twitchgamenotify.cache import (
-    is_cache_locked,
-    load_cache,
-    lock_cache,
-    unlock_cache,
-    save_cache,
-)
 from twitchgamenotify.configuration import (
     ConfigFileInvalid,
     ConfigFileNotFound,
@@ -50,26 +43,6 @@ def main():
     # trigger
     signal.signal(signal.SIGTERM, graceful_exit)
     signal.signal(signal.SIGINT, graceful_exit)
-
-    # Load cached static API data
-    if not cli_args.no_caching:
-        # Load the cache
-        cache_dict = load_cache()
-
-        if is_cache_locked():
-            # Another process has claimed the cache
-            logging.warning(
-                "Cache file is locked. All static API data "
-                "collected during this run will be discarded."
-            )
-        else:
-            # Claim ownership of the cache
-            lock_cache()
-
-            # Create a hook to save and unlock the cache when exiting
-            # the program
-            atexit.register(unlock_cache)
-            atexit.register(save_cache, cache_dict)
 
     # Read config file
     try:
@@ -152,9 +125,6 @@ def main():
         kwargs["ignore_502s"] = config_dict["ignore-502-one-shot"]
     else:
         kwargs["ignore_502s"] = config_dict["ignore-502-errors-persistant"]
-
-    if not cli_args.no_caching:
-        kwargs["names_cache"] = cache_dict
 
     if not cli_args.one_shot:
         # Remember what game a streamer was playing last so we don't

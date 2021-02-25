@@ -31,8 +31,6 @@ except KeyError:
 
 # Config file names
 CONFIG_FILE_NAME = "config.yaml"
-CACHE_FILE_NAME = "cache.json"
-CACHE_FILE_LOCK_NAME = CACHE_FILE_NAME + ".lock"
 
 
 # Loglevel CLI options
@@ -55,8 +53,6 @@ LOGLEVEL_DICT = {
 # Twitch API URLs
 TWITCH_BASE_API_URL = "https://api.twitch.tv/helix"
 TWITCH_STREAM_API_URL = TWITCH_BASE_API_URL + "/streams"
-TWITCH_USER_API_URL = TWITCH_BASE_API_URL + "/users"
-TWITCH_GAME_API_URL = TWITCH_BASE_API_URL + "/games"
 TWITCH_TOKEN_API_URL = "https://id.twitch.tv/oauth2/token"
 
 

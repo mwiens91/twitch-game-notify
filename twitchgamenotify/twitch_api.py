@@ -9,10 +9,8 @@ from twitchgamenotify.constants import (
     HTTP_200_OK,
     HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
-    TWITCH_GAME_API_URL,
     TWITCH_STREAM_API_URL,
     TWITCH_TOKEN_API_URL,
-    TWITCH_USER_API_URL,
 )
 
 
@@ -153,12 +151,21 @@ class TwitchApi:
 
         Returns:
             A dictionary of information about the queried stream
-            including whether it's live, its title, and the current
-            game's game ID. For example:
+            including
+
+            - whether the stream is live
+            - the stream's title
+            - the streamer's display name
+            - the game's name
+            - the game's ID
+
+            For example:
 
             {'live': True,
-             'title': "Macie Jay Charm PogChamp",
-             'game_id': '460630'}
+             'title': "Testing TAS-Only Glitch | State of Play @ 2PM PST",
+             'user_display_name': 'Distortion2',
+             'game_name': 'Little Nightmares II',
+             'game_id': ''}
         """
         # Make a request to the Twitch API
         response = self.make_http_request(
@@ -170,51 +177,20 @@ class TwitchApi:
 
         if not response_data:
             # Stream is offline
-            stream_info = dict(live=False, title="", game_id="")
+            stream_info = dict(
+                live=False,
+                title="",
+                user_display_name="",
+                game_name="",
+                game_id="",
+            )
         else:
             stream_info = dict(
                 live=True,
                 title=response_data[0]["title"],
+                user_display_name=response_data[0]["user_name"],
+                game_name=response_data[0]["game_name"],
                 game_id=response_data[0]["game_id"],
             )
 
         return stream_info
-
-    def get_streamer_display_name(self, streamer_login_name):
-        """Get a streamer's display name given their login name.
-
-        Arg:
-            streamer_login_name: A string specifying the streamer's
-                login name. For example, "moonmoon".
-
-        Returns:
-            A string containing the streamer's display name.
-        """
-        # Make a request to the Twitch API
-        response = self.make_http_request(
-            TWITCH_USER_API_URL + "?login=" + streamer_login_name
-        )
-
-        # Return the display name
-        return response.json()["data"][0]["display_name"]
-
-    def get_game_title(self, game_id):
-        """Get a game's title given the game's ID.
-
-        Arg:
-            game_id: A string containing a Twitch game ID.
-
-        Returns:
-            A string containing the game's title.
-        """
-        # Special case: no game set (Twitch gives this a game ID of 0)
-        if game_id == "0":
-            return ""
-
-        # Make a request to the Twitch API
-        response = self.make_http_request(
-            TWITCH_GAME_API_URL + "?id=" + game_id
-        )
-
-        # Return the game title
-        return response.json()["data"][0]["name"]

@@ -5,7 +5,6 @@ import os.path
 from schema import And, Optional, Or, Schema
 import sys
 import yaml
-from twitchgamenotify.cache import unlock_cache
 from twitchgamenotify.constants import (
     CONFIG_FILE_NAME,
     EXAMPLE_CONFIG_FILE_PATH,
@@ -34,22 +33,6 @@ class PrintExampleConfigAction(argparse.Action):
         with open(EXAMPLE_CONFIG_FILE_PATH, "r") as f:
             print(f.read())
 
-        sys.exit(0)
-
-
-class RemoveCacheLockAction(argparse.Action):
-    """argparse action to remove cache lock (should one exist)."""
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Remove the cache lock."""
-        try:
-            unlock_cache(catch_failure=False)
-        except FileNotFoundError:
-            print(
-                "WARNING: No existing cache lock to remove!", file=sys.stderr
-            )
-
-        # Get out
         sys.exit(0)
 
 
@@ -156,9 +139,6 @@ def parse_runtime_args():
         help="don't launch an app indicator",
     )
     parser.add_argument(
-        "--no-caching", action="store_true", help="don't cache static API data"
-    )
-    parser.add_argument(
         "--print-config",
         nargs=0,
         action=PrintExampleConfigAction,
@@ -168,12 +148,6 @@ def parse_runtime_args():
         "--print-to-terminal",
         action="store_true",
         help="print to terminal (doesn't connect to D-Bus)",
-    )
-    parser.add_argument(
-        "--remove-cache-lock",
-        nargs=0,
-        action=RemoveCacheLockAction,
-        help="removes a cache lock if one exists",
     )
     parser.add_argument(
         "--version", action="version", version="%(prog)s " + VERSION

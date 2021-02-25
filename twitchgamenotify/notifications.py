@@ -118,7 +118,6 @@ def process_notifications_for_streamer(
     games,
     twitch_api,
     ignore_502s,
-    names_cache,
     streamers_previous_game,
     print_to_terminal,
 ):
@@ -130,8 +129,6 @@ def process_notifications_for_streamer(
         games: A dictionary containing information about what games to
             allow (or disallow) for the streamer. See the configuration
             file for how these look.
-        names_cache: A dictionary containing cached names for
-            games and streamers. Can be None
         print_to_terminal: A boolean signalling whether to
             print to the terminal instead of passing a message to D-Bus.
         streamer_login_name: A string containing the login name of the
@@ -189,67 +186,14 @@ def process_notifications_for_streamer(
         # Game not in the include list
         return
 
-    # Gather info about the stream. Lookup info in the cache first
-    # if it's available.
-    if names_cache is not None:
-        # Try getting the display name from the cache
-        try:
-            streamer_display_name = names_cache["streamers"][
-                streamer_login_name
-            ]
-        except KeyError:
-            # Fetch it
-            try:
-                streamer_display_name = twitch_api.get_streamer_display_name(
-                    streamer_login_name
-                )
-            except FailedHttpRequest as e:
-                handle_failed_http_request(e, ignore_502s, print_to_terminal)
-
-                return
-
-            # Store it
-            names_cache["streamers"][
-                streamer_login_name
-            ] = streamer_display_name
-
-        # Try getting the game title from the cache
-        try:
-            game_title = names_cache["games"][game_id]
-        except KeyError:
-            # Fetch it
-            try:
-                game_title = twitch_api.get_game_title(game_id)
-            except FailedHttpRequest as e:
-                handle_failed_http_request(e, ignore_502s, print_to_terminal)
-
-                return
-
-            # Store it
-            names_cache["games"][game_id] = game_title
-    else:
-        # Not using cache. Fetch everything.
-        try:
-            streamer_display_name = twitch_api.get_streamer_display_name(
-                streamer_login_name
-            )
-            game_title = twitch_api.get_game_title(game_id)
-        except FailedHttpRequest as e:
-            handle_failed_http_request(e, ignore_502s, print_to_terminal)
-
-            return
-
-    # Title is never cached
-    stream_title = info["title"]
-
     # Send a notification
     if print_to_terminal:
         print_notification_to_terminal(
-            streamer_display_name, stream_title, game_title
+            info["user_display_name"], info["title"], info["game_name"]
         )
     else:
         send_notification_to_dbus(
-            streamer_display_name, stream_title, game_title
+            info["user_display_name"], info["title"], info["game_name"]
         )
 
 
@@ -257,7 +201,6 @@ def process_notifications(
     streamers,
     twitch_api,
     ignore_502s,
-    names_cache=None,
     streamers_previous_game=None,
     print_to_terminal=False,
 ):
@@ -269,13 +212,6 @@ def process_notifications(
     Args:
         ignore_502s: A boolean signaling whether to ignore 502 errors when
             querying the Twitch API.
-        names_cache: An optional dictionary containing cached names for
-            games and streamers. For example:
-
-            {"games": {"460630": "Tom Clancy's Rainbow Six: Siege"},
-             "streamers": {"macie_jay": "Macie_Jay"}}
-
-            Defaults to None.
         print_to_terminal: An optional boolean signalling whether to
             print to the terminal instead of passing a message to D-Bus.
             Defaults to False.
@@ -304,7 +240,6 @@ def process_notifications(
             games_dict,
             twitch_api,
             ignore_502s,
-            names_cache,
             streamers_previous_game,
             print_to_terminal,
         )
