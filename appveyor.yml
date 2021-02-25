@@ -34,7 +34,6 @@ build: off
 
 test_script:
   # Test
-  - coverage run ./setup.py test
   - coverage run run_twitchgamenotify.py --print-config
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
