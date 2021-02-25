@@ -15,8 +15,8 @@ install:
   - sudo apt install -y python3-pip
   - pip3 install -U setuptools
 
-  # Code codecov package
-  - pip3 install codecov
+  # codecov stuff
+  - sudo pip3 install codecov
 
   # Install project requirements
   - pip3 install -r requirements.txt
@@ -34,6 +34,7 @@ build: off
 
 test_script:
   # Test
+  - coverage run ./setup.py test
   - coverage run run_twitchgamenotify.py --print-config
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
