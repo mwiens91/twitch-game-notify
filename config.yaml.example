@@ -20,26 +20,19 @@ twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 # Streamers: a list of streamer login names, and for each, which
 # games/game IDs to notify about
 streamers:
-  "macie_jay":     # Macie_Jay
-    include:
-      - "460630"   # notify my when Macie plays Rainbow Six: Siege
-  "moonmoon_ow":   # MOONMOON_OW
-    include:
-      - "*"        # notify me when Moon plays any game
-    exclude:
-      - "33214"    # except for Fortnite
   "shroud":
     include:
-      - "*"
+      - "Valorant" # notify me only when shroud plays Rainbow Six: Siege
+  "hasanabi":
+    include:
+      - "*"        # notify me when Hasan plays any game
     exclude:
-      - "493057"
-      - "33214"
-      - "493057"
+      - "Just Chatting"    # except for when he's Just Chatting
   "loltyler1":
     include:
-      - "*"
+      - "*"        # notify me when Tyler1 plays any game
     exclude:
-      - "21779"
+      - "21779"    # except for League of Legends
 
 # Ignore 502 "Bad Gateway" errors: these are going to occur somewhat
 # randomly and don't necessarily mean anything is wrong. For "one-shot"

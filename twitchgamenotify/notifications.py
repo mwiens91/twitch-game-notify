@@ -223,8 +223,9 @@ def process_notifications(
             dictionaries containing the user's settings for the
             streamer. For example:
 
-            {'macie_jay': {'include': '460630'},
-             'moonmoon': {'include': '*', 'exclude': '33214'}}
+            {'shroud: {'include': ['Valorant']},
+             'hasanabi': {'include': ['*'], 'exclude': ['Just Chatting']},
+             'tyler1': {'include': ['*'], 'exclude': ['33214']}}
         streamers_previous_game: An optional dictionary containing
             information about what game a streamer was last seen
             playing.  The keys are strings containing the streamers
