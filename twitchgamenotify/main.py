@@ -122,7 +122,7 @@ def main():
     )
 
     if cli_args.one_shot:
-        kwargs["ignore_502s"] = config_dict["ignore-502-one-shot"]
+        kwargs["ignore_502s"] = config_dict["ignore-502-errors-one-shot"]
     else:
         kwargs["ignore_502s"] = config_dict["ignore-502-errors-persistant"]
 
