@@ -38,9 +38,6 @@ test_script:
   - coverage run run_twitchgamenotify.py --print-config
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal
   - coverage run run_twitchgamenotify.py --one-shot --print-to-terminal --loglevel info
-  - ./setup.py install --prefix ~/.local
-  - twitch-game-notify --one-shot --print-to-terminal
-  - twitch-game-notify --one-shot --print-to-terminal --loglevel info
 
 after_test:
   # Upload coverage data to CodeCov
