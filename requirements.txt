@@ -9,4 +9,4 @@ PyGObject==3.38.0
 PyYAML==5.4.1
 requests==2.25.1
 schema==0.7.4
-urllib3==1.26.3
+urllib3==1.26.4
