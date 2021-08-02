@@ -56,7 +56,7 @@ twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 streamers:
   "shroud":
     include:
-      - "Valorant" # notify me only when shroud plays Rainbow Six: Siege
+      - "Valorant" # notify me only when shroud plays Valorant
   "hasanabi":
     include:
       - "*"        # notify me when Hasan plays any game
