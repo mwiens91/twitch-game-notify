@@ -7,11 +7,11 @@
 # twitch-game-notify
 
 This is a Twitch notifier which notifies you when your favourite
-steamers stream your favourite things. Any flavour of unix that
+steamers stream your favourite categories. Any flavour of unix that
 supports GTK3 should work with this.
 
 With normal settings, this will send notifications to your existing
-notification handler when a streamer is playing a game you've specified.
+notification handler when a streamer is streaming categories you've specified.
 There's also a tray icon so you can easily quit the application.
 
 
@@ -52,29 +52,28 @@ twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 
 # Streamers: a list of streamer login names, and for each, which
-# games/game IDs to notify about
+# categories to notify about
 streamers:
   "shroud":
     include:
       - "Valorant" # notify me only when shroud plays Valorant
   "hasanabi":
     include:
-      - "*"        # notify me when Hasan plays any game
+      - "*"        # notify me when Hasan streams any category
     exclude:
       - "Just Chatting"    # except for when he's Just Chatting
   "loltyler1":
     include:
-      - "*"        # notify me when Tyler1 plays any game
+      - "*"        # notify me when Tyler1 streams any category
     exclude:
       - "21779"    # except for League of Legends
-
 ```
 
 Here you need to put in your authentication credentials, and specify
-what streamers you care about and what things they stream that you care
-about (or don't care about). Note that you can specify games using
-either their name as they appear on Twitch or by their internal game
-IDs—either is fine.
+what streamers you care about and what categories they stream that you care
+about (or don't care about). Note that you can specify categories using
+either their names as they appear on Twitch or by their internal IDs—either is fine.
+(Note that internal category IDs can be found by querying Twitch's API.)
 
 ### Setting up a configuration file
 
