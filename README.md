@@ -51,20 +51,18 @@ Configuration files something look like the following:
 twitch-api-client-id: "p0gch4mp101fy451do9uod1s1x9i4a"
 twitch-api-client-secret: "itqb0thqi5cek18ae6ekm7pbqvh63k"
 
-# Streamers: a list of streamer login names, and for each, which
-# categories to notify about
 streamers:
-  "shroud":
+  "distortion2":
     include:
-      - "Valorant" # notify me only when shroud plays Valorant
-  "hasanabi":
+      - "Dark Souls" # notify me only when Distortion2 plays Dark Souls
+  "outerheaven":
     include:
-      - "*"        # notify me when Hasan streams any category
+      - "*"        # notify me when OuterHeaven streams any category
     exclude:
-      - "Just Chatting"    # except for when he's Just Chatting
-  "loltyler1":
+      - "Metal Gear Solid V: The Phantom Pain"    # except for when he's playing MGSV
+  "otzdarva":
     include:
-      - "*"        # notify me when Tyler1 streams any category
+      - "*"        # notify me when Otzdarva streams any category
     exclude:
       - "21779"    # except for League of Legends
 ```
