@@ -79,6 +79,9 @@ def parse_config_file():
 
     Returns:
         A dictionary containing settings in user config file.
+
+    Raises:
+        ConfigFileInvalid: A config file wasn't valid.
     """
     # Find the config file first
     config_path = find_config_file()
