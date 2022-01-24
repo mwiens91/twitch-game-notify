@@ -48,11 +48,11 @@ setup(
     },
     python_requires=">=3.7",
     install_requires=[
-        "dbus-python",
-        "notify2",
-        "PyGObject",
-        "PyYAML",
-        "requests",
-        "schema",
+        "dbus-python>=1.2",
+        "notify2>=0.3",
+        "PyGObject>=3.42",
+        "PyYAML>=6.0",
+        "requests>=2.26",
+        "schema>=0.7",
     ],
 )
